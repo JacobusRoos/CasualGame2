@@ -5,6 +5,7 @@ using UnityEngine;
 public class Soul : MonoBehaviour
 {
     public float lifespan;
+    public float timeToRipe;
     public GameObject plot;
 
 	// Use this for initialization
@@ -16,6 +17,15 @@ public class Soul : MonoBehaviour
     void Update()
     {
         lifespan -= Time.deltaTime;
+        timeToRipe -= Time.deltaTime;
+        if(timeToRipe <= 0)
+        {
+            transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(214f/255, 214f/255, 255f/255, 200f/255);
+        }
+        else
+        {
+            transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(255f / 255, 214f / 255, 214f / 255, 200f / 255);
+        }
         if (lifespan <= 0)
         {
             plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
