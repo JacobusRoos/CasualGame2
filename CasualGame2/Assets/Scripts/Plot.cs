@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Plot : MonoBehaviour
 {
+    public int cost;
     public int capacity;
+    public PlayerManager playerManager;
     List<GameObject> soulContent = new List<GameObject>();
 
 	// Use this for initialization
@@ -21,7 +23,7 @@ public class Plot : MonoBehaviour
 
     public void AddToPlot(GameObject soul)
     {
-        if (!IsFull())
+        if (!IsFull() && playerManager.CanAfford(soul.GetComponent<Soul>().cost))
         {
             GameObject newSoul = Instantiate(soul, transform);
             bool[] freePositions = new bool[8];
@@ -41,8 +43,10 @@ public class Plot : MonoBehaviour
                 closestFree++;
             }
             newSoul.transform.localPosition = new Vector3(-0.25f + (float)((closestFree % 2) * .5), 13.5f, .3f - (Mathf.Floor(closestFree / 2) * .2f));
-            soulContent.Add(newSoul);
             newSoul.GetComponent<Soul>().plot = gameObject;
+            playerManager.ChangeEctoplasm(-newSoul.GetComponent<Soul>().cost);
+            playerManager.ChangeExperience(10);
+            soulContent.Add(newSoul);
         }
     }
     public void RemoveFromPlot(GameObject soul)
@@ -53,6 +57,13 @@ public class Plot : MonoBehaviour
         }
     }
 
+    public List<GameObject> SoulContent
+    {
+        get
+        {
+            return soulContent;
+        }
+    }
     bool IsEmpty()
     {
         return soulContent.Count == 0;

@@ -23,9 +23,26 @@ public class GameManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if(Physics.Raycast(ray, out hit))
             {
-                if(hit.collider.tag == "PlotPoint")
+                if (hit.collider.tag == "Soul")
                 {
-                    hit.collider.GetComponent<Plot>().AddToPlot(soulPrefab);
+                    if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
+                    {
+                        playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
+                        playerManager.ChangeExperience(20);
+                    }
+                    hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
+                    Destroy(hit.collider.gameObject);
+                }
+                if (hit.collider.tag == "PlotPoint")
+                {
+                    if (hit.collider.GetComponent<Plot>() == null)
+                    {
+                        hit.collider.transform.parent.GetComponent<Plot>().AddToPlot(soulPrefab);
+                    }
+                    else
+                    {
+                        hit.collider.GetComponent<Plot>().AddToPlot(soulPrefab);
+                    }
                 }
                 if (hit.collider.tag == "Ground")
                 {

@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class Soul : MonoBehaviour
 {
+    public int cost;
+    public float ectoPerSecond;
+    public float ectoPerHarvest;
     public float lifespan;
     public float timeToRipe;
     public GameObject plot;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
 		
 	}
 
@@ -31,5 +35,5 @@ public class Soul : MonoBehaviour
             plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
             Destroy(gameObject);
         }
-	}
+    }
 }
