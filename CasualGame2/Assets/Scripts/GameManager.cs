@@ -52,4 +52,12 @@ public class GameManager : MonoBehaviour
             }
         }
 	}
+
+    /// <summary>
+    /// Need an easy way to exit the game to avoid Android doing stupid things
+    /// </summary>
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }
