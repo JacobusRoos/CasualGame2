@@ -37,11 +37,11 @@ public class GameManager : MonoBehaviour
                 {
                     if (hit.collider.GetComponent<Plot>() == null)
                     {
-                        hit.collider.transform.parent.GetComponent<Plot>().AddToPlot(soulPrefab);
+                        hit.collider.transform.parent.parent.GetComponent<Plot>().AddToPlot(soulPrefab);
                     }
                     else
                     {
-                        hit.collider.GetComponent<Plot>().AddToPlot(soulPrefab);
+                        hit.collider.transform.parent.GetComponent<Plot>().AddToPlot(soulPrefab);
                     }
                 }
                 if (hit.collider.tag == "Ground")

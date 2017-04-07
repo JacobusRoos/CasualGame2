@@ -9,15 +9,20 @@ public class PlayerManager : MonoBehaviour
     public int experience;
     int nextLevelExperience;
     int maxPlots = 2;
+    GameManager gameManager;
     List<GameObject> plotList = new List<GameObject>();
+    public List<int> levelUnlocks = new List<int>();
+    public List<GameObject> levelSouls = new List<GameObject>();
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
         ectoplasm = 50;
         level = 1;
         experience = 0;
         nextLevelExperience = 500;
+         
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 	}
 	
 	// Update is called once per frame
@@ -102,10 +107,15 @@ public class PlayerManager : MonoBehaviour
     {
         level++;
         experience = 0;
-        nextLevelExperience = level * 1000;
+        nextLevelExperience = level * 500;
         if(level % 2 == 0)
         {
             maxPlots += 1;
+        }
+
+        if(levelUnlocks.Contains(level))
+        {
+            gameManager.soulPrefab = levelSouls[levelUnlocks.IndexOf(level)];
         }
     }
 }
