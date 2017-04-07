@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -52,6 +53,29 @@ public class GameManager : MonoBehaviour
             }
         }
 	}
+
+    /// <summary>
+    /// Called automatically by Unity when the app is switched out of
+    /// </summary>
+    void OnApplicationPause(bool pausing)
+    {
+        if (pausing) SaveGame();
+    }
+
+    public void SaveGame()
+    {
+        try
+        {
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "/savedGames.gd"));
+            bf.Serialize(file, "Something stupid and simple just to make sure we can save stuff");
+            file.Close();
+        }
+        catch (IOException ex)
+        {
+            Debug.Log($"There was an error thrown by the OS when trying to save! Exception: {ex.Message}");
+        }
+    }
 
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
