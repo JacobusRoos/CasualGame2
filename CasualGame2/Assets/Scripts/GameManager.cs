@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,10 +9,18 @@ public class GameManager : MonoBehaviour
     public GameObject soulPrefab;
     public PlayerManager playerManager;
 
+    public Camera mainCamera;
+    public Canvas GUICanvas;
+
+    public GameObject selectedSoul;
+    public Image SelectedImage;
+    private bool soulIsSelected;
+
+
 	// Use this for initialization
 	void Start ()
     {
-		
+        selectedSoul = null;
 	}
 	
 	// Update is called once per frame
@@ -25,8 +34,12 @@ public class GameManager : MonoBehaviour
             {
                 if (hit.collider.tag == "Soul")
                 {
+                    SelectSoul(hit.collider.gameObject);
+
                     if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
                     {
+                        SelectSoul(hit.collider.gameObject);
+
                         playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
                         playerManager.ChangeExperience(20);
                     }
@@ -59,5 +72,16 @@ public class GameManager : MonoBehaviour
     public void Exit()
     {
         Application.Quit();
+    }
+
+    private void SelectSoul(GameObject Soul)
+    {
+        RectTransform GUIRect = GUICanvas.GetComponent<RectTransform>();
+
+        Vector2 ViewPositon = mainCamera.WorldToViewportPoint(Soul.transform.position);
+
+        Vector2 SoulScreenPos = new Vector2(((ViewPositon.x * GUIRect.sizeDelta.x) - (GUIRect.sizeDelta.x * .5f)), ((ViewPositon.y * GUIRect.sizeDelta.y) - (GUIRect.sizeDelta.y * .5f)));
+
+        SelectedImage.GetComponent<RectTransform>().anchoredPosition = SoulScreenPos;
     }
 }
