@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,10 +9,18 @@ public class GameManager : MonoBehaviour
     public GameObject soulPrefab;
     public PlayerManager playerManager;
 
+    public Camera mainCamera;
+    public Canvas GUICanvas;
+
+    public GameObject selectedSoul;
+    public Image selectedImage;
+    private bool soulIsSelected;
+
 	// Use this for initialization
 	void Start ()
     {
-		
+        selectedSoul = null;
+        soulIsSelected = false;
 	}
 	
 	// Update is called once per frame
@@ -25,6 +34,7 @@ public class GameManager : MonoBehaviour
             {
                 if (hit.collider.tag == "Soul")
                 {
+                    SelectSoul(hit.collider.gameObject);
                     if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
                     {
                         playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
@@ -52,6 +62,17 @@ public class GameManager : MonoBehaviour
             }
         }
 	}
+
+    private void SelectSoul(GameObject Soul)
+    {
+        RectTransform GUIRect = GUICanvas.GetComponent<RectTransform>();
+
+        Vector2 viewPosition = mainCamera.WorldToViewportPoint(Soul.transform.position);
+
+        Vector2 soulScreenpos = new Vector2(((viewPosition.x * GUIRect.sizeDelta.x) - (GUIRect.sizeDelta.x * .5f)), ((viewPosition.y * GUIRect.sizeDelta.y) - (GUIRect.sizeDelta.y * .5f)));
+
+        selectedImage.GetComponent<RectTransform>().anchoredPosition = soulScreenpos;
+    }
 
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
