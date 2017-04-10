@@ -33,8 +33,8 @@ public class Plot : MonoBehaviour
             }
             foreach(GameObject obj in soulContent)
             {
-                int pos = (int)((obj.transform.localPosition.x + 2f) / 4f);
-                int pos2 = -(int)((obj.transform.localPosition.z - 2.625f) / 1.75f);
+                int pos = (int)((obj.transform.localPosition.x + .25f) / .5f);
+                int pos2 = -(int)((obj.transform.localPosition.z - .3f) / .2f);
                 freePositions[(pos) + (pos2 * 2)] = false;
             }
             int closestFree = 0;
@@ -42,7 +42,7 @@ public class Plot : MonoBehaviour
             {
                 closestFree++;
             }
-            newSoul.transform.localPosition = new Vector3(-2f + (float)((closestFree % 2) * 4), 2, 2.625f - (Mathf.Floor(closestFree / 2) * 1.75f));
+            newSoul.transform.localPosition = new Vector3(-0.25f + (float)((closestFree % 2) * .5), 13.5f, .3f - (Mathf.Floor(closestFree / 2) * .2f));
             newSoul.GetComponent<Soul>().plot = gameObject;
             playerManager.ChangeEctoplasm(-newSoul.GetComponent<Soul>().cost);
             playerManager.ChangeExperience(10);
