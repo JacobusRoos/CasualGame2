@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     public GameObject selectedSoul;
     public Image selectedImage;
     private bool soulIsSelected;
+	
+	private Vector3 prevMousePosition;
+	public Vector4 limit;
 
 	// Use this for initialization
 	void Start ()
@@ -61,6 +64,16 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+		
+		if(Input.GetMouseButton(0))
+        {
+			Camera.main.transform.Translate((.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+			Camera.main.transform.Translate(-(.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+			//combines the previous 2 lines into 1
+			//Camera.main.transform.Translate((.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
+			
+		}
+		prevMousePosition = Input.mousePosition;
 	}
 
     private void SelectSoul(GameObject Soul)
