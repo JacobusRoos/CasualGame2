@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "/savedGames.gd"));
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "/savetest.sav"));
             bf.Serialize(file, "Something stupid and simple just to make sure we can save stuff");
             file.Close();
         }
