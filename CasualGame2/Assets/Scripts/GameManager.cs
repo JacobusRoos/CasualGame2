@@ -101,13 +101,15 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "/savetest.sav"));
-            bf.Serialize(file, "Something stupid and simple just to make sure we can save stuff");
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "savetest.sav"));
+            SaveData save = new SaveData() {
+                CreationTimestamp = System.DateTime.UtcNow
+            };
             file.Close();
         }
         catch (IOException ex)
         {
-            Debug.Log($"There was an error thrown by the OS when trying to save! Exception: {ex.Message}");
+            Debug.Log("There was an error thrown by the OS when trying to save! Exception: " + ex.Message);
         }
     }
 
