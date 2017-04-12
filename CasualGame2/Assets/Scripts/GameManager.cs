@@ -12,10 +12,12 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public Canvas GUICanvas;
 
-    public GameObject selectedSoul;
-    public Image selectedImage;
+    private GameObject selectedSoul;
+    public GameObject selectedImage;
     private bool soulIsSelected;
-	
+
+    public GameObject soulMenu;
+
 	private Vector3 prevMousePosition;
 	public Vector4 limit;
 
@@ -24,7 +26,8 @@ public class GameManager : MonoBehaviour
     {
         selectedSoul = null;
         soulIsSelected = false;
-	}
+        selectedImage.SetActive(false);
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -33,19 +36,29 @@ public class GameManager : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(ray, out hit))
+
+            selectedImage.SetActive(false);
+
+
+
+            if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider.tag == "Soul")
                 {
                     SelectSoul(hit.collider.gameObject);
-                    if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
-                    {
-                        playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
-                        playerManager.ChangeExperience(20);
-                    }
-                    hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
-                    Destroy(hit.collider.gameObject);
+                    //if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
+                    //{
+                    //    playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
+                    //    playerManager.ChangeExperience(20);
+                    //}
+                    //hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
+                    //Destroy(hit.collider.gameObject);
                 }
+                else
+                {
+                    soulMenu.GetComponent<SoulMenu>().Hide();
+                }
+
                 if (hit.collider.tag == "PlotPoint")
                 {
                     if (hit.collider.GetComponent<Plot>() == null)
@@ -85,7 +98,20 @@ public class GameManager : MonoBehaviour
         Vector2 soulScreenpos = new Vector2(((viewPosition.x * GUIRect.sizeDelta.x) - (GUIRect.sizeDelta.x * .5f)), ((viewPosition.y * GUIRect.sizeDelta.y) - (GUIRect.sizeDelta.y * .5f)));
 
         selectedImage.GetComponent<RectTransform>().anchoredPosition = soulScreenpos;
+
+        selectedImage.SetActive(true);
+
+        selectedSoul = Soul;
+
+        DisplaySelectedSoulInfo();
     }
+
+    private void DisplaySelectedSoulInfo()
+    {
+        soulMenu.GetComponent<SoulMenu>().Show();
+    }
+
+    
 
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
