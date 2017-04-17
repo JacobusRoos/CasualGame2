@@ -46,7 +46,8 @@ public class GameManager : MonoBehaviour
                         playerManager.ChangeExperience(20);
                     }
                     hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
-                    Destroy(hit.collider.gameObject);
+					hit.collider.GetComponent<Soul>().Harvest();
+                    //Destroy(hit.collider.gameObject);
                 }
                 if (hit.collider.tag == "PlotPoint")
                 {
