@@ -21,6 +21,11 @@ public struct SerializableVector3
     {
         return new Vector3(v.X, v.Y, v.Z);
     }
+
+    public static implicit operator SerializableVector3(Vector3 v)
+    {
+        return new SerializableVector3() { X = v.x, Y = v.y, Z = v.z };
+    }
 }
 
 [System.Serializable]

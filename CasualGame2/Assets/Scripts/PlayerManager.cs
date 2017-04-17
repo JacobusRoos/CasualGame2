@@ -60,6 +60,14 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public GameObject AddPlotDirect(GameObject plot, Vector3 position)
+    {
+        GameObject newPlot = Instantiate(plot, position, Quaternion.identity);
+        newPlot.GetComponent<Plot>().playerManager = this;
+        plotList.Add(newPlot);
+        return newPlot;
+    }
+
     public bool IsFull
     {
         get
@@ -93,6 +101,11 @@ public class PlayerManager : MonoBehaviour
         {
             return level;
         }
+    }
+
+    public List<GameObject> Plots
+    {
+        get { return plotList; }
     }
 
     //use these to change public variables

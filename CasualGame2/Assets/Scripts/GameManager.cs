@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         selectedSoul = null;
         soulIsSelected = false;
+        LoadSave();
 	}
 	
 	// Update is called once per frame
@@ -101,15 +102,67 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "savetest.sav"));
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "newsave.sav"));
             SaveData save = new SaveData() {
-                CreationTimestamp = System.DateTime.UtcNow
+                CreationTimestamp = System.DateTime.UtcNow,
+                Plots = new Dictionary<SerializableVector3, SerializablePlot>()
             };
+            foreach(var plotObj in playerManager.Plots)
+            {
+                var plot = plotObj.GetComponent<Plot>();
+                SerializablePlot splot = new SerializablePlot() { Souls = new SerializableSoul[plot.SoulContent.Count] };
+                for(int i = 0; i < plot.SoulContent.Count; i++)
+                {
+                    var soul = plot.SoulContent[i].GetComponent<Soul>();
+                    SerializableSoul ssoul = new SerializableSoul() {
+                        EctoPerHarvest = soul.ectoPerHarvest,
+                        EctoPerSecond = soul.ectoPerSecond,
+                        Lifespan = soul.lifespan,
+                        TimeToRipe = soul.timeToRipe
+                    };
+                    splot.Souls[i] = ssoul;
+                }
+                save.Plots.Add(plotObj.transform.position, splot);
+            }
+            bf.Serialize(file, save);
             file.Close();
         }
         catch (IOException ex)
         {
             Debug.Log("There was an error thrown by the OS when trying to save! Exception: " + ex.Message);
+        }
+    }
+
+    private void LoadSave()
+    {
+        try
+        {
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "newsave.sav"));
+            object rawsave = bf.Deserialize(file);
+            SaveData save = (SaveData)rawsave;
+            foreach(var plot in save.Plots)
+            {
+                GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, plot.Key);
+                Plot newPlot = instantiated.GetComponent<Plot>();
+                foreach(var savedSoul in plot.Value.Souls)
+                {
+                    GameObject instantiatedSoul = newPlot.AddToPlotDirect(soulPrefab);
+                    Soul newSoul = instantiatedSoul.GetComponent<Soul>();
+                    newSoul.ectoPerHarvest = savedSoul.EctoPerHarvest;
+                    newSoul.ectoPerSecond = savedSoul.EctoPerSecond;
+                    newSoul.lifespan = savedSoul.Lifespan;
+                    newSoul.timeToRipe = savedSoul.TimeToRipe;
+                }
+            }
+        }
+        catch(FileNotFoundException)
+        {
+            Debug.Log("No save file found, ignoring.");
+        }
+        catch (IOException ex)
+        {
+            Debug.Log("There was an error thrown by the OS when trying to load the save file! Exception: " + ex.Message);
         }
     }
 
