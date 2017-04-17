@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 	
 	private Vector3 prevMousePosition;
 	public Vector4 limit;
+	
+	private Vector2 distanceTraveled = new Vector2(0, 0);
 
 	// Use this for initialization
 	void Start ()
@@ -68,10 +70,19 @@ public class GameManager : MonoBehaviour
 		
 		if(Input.GetMouseButton(0))
         {
-			Camera.main.transform.Translate((.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-			Camera.main.transform.Translate(-(.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+			if(distanceTraveled.x + .25f * (Input.mousePosition.x - prevMousePosition.x) < 30 && distanceTraveled.x + .25f * (Input.mousePosition.x - prevMousePosition.x) > -30)
+			{
+				Camera.main.transform.Translate((.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+				distanceTraveled.x += .25f * (Input.mousePosition.x - prevMousePosition.x);
+			}
+			if(distanceTraveled.y + .25f * (Input.mousePosition.y - prevMousePosition.y) < 30 && distanceTraveled.y + .25f * (Input.mousePosition.y - prevMousePosition.y) > -30)
+			{
+				Camera.main.transform.Translate(-(.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+				distanceTraveled.y += .25f * (Input.mousePosition.y - prevMousePosition.y);
+			}
             //combines the previous 2 lines into 1
             //Camera.main.transform.Translate((.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
+			
             prevMousePosition = Input.mousePosition;
         }
 	}
