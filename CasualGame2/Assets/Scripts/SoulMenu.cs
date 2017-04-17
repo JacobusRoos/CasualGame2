@@ -9,8 +9,8 @@ public class SoulMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        showPosition = new Vector2(0f, 110f);
-        hidePosition = new Vector2(0f, -110f);
+        hidePosition = this.GetComponent<RectTransform>().anchoredPosition;
+        showPosition = new Vector2(hidePosition.x, hidePosition.y + 220);
 	}
 	
 	// Update is called once per frame

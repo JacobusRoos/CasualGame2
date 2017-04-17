@@ -32,6 +32,22 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        if (selectedSoul == null)
+        {
+            soulMenu.GetComponent<SoulMenu>().Hide();
+
+            soulIsSelected = false;
+
+            selectedSoul = null;
+
+            selectedImage.SetActive(false);
+        }
+
+        if(soulIsSelected)
+        {
+            soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+        }
+
 		if(Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -57,6 +73,12 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     soulMenu.GetComponent<SoulMenu>().Hide();
+
+                    soulIsSelected = false;
+
+                    selectedSoul = null;
+
+                    selectedImage.SetActive(false);
                 }
 
                 if (hit.collider.tag == "PlotPoint")
@@ -103,12 +125,20 @@ public class GameManager : MonoBehaviour
 
         selectedSoul = Soul;
 
+        soulIsSelected = true;
+
         DisplaySelectedSoulInfo();
     }
 
     private void DisplaySelectedSoulInfo()
     {
         soulMenu.GetComponent<SoulMenu>().Show();
+
+        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
+
+        soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+
+        soulMenu.transform.GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
     }
 
     
