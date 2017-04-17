@@ -20,6 +20,10 @@ public class GameManager : MonoBehaviour
 
 	private Vector3 prevMousePosition;
 	public Vector4 limit;
+	
+	private Vector2 distanceTraveled = new Vector2(0, 0);
+	
+	private bool canMove;
 
 	// Use this for initialization
 	void Start ()
@@ -62,12 +66,22 @@ public class GameManager : MonoBehaviour
                 if (hit.collider.tag == "Soul")
                 {
                     SelectSoul(hit.collider.gameObject);
+<<<<<<< HEAD
                     //if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
                     //{
                     //    playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
                     //    playerManager.ChangeExperience(20);
                     //}
                     //hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
+=======
+                    if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
+                    {
+                        playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
+                        playerManager.ChangeExperience(20);
+                    }
+                    hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
+					hit.collider.GetComponent<Soul>().Harvest();
+>>>>>>> 3f707d402a863fc2ad24926c390a2ad7cb350549
                     //Destroy(hit.collider.gameObject);
                 }
                 else
@@ -98,17 +112,36 @@ public class GameManager : MonoBehaviour
                     playerManager.AddPlot(plotPrefab, new Vector3((hitPoint.x * 10) + 5, 0.05f, (hitPoint.y * 10) + 5));
                 }
             }
+		    prevMousePosition = Input.mousePosition;
         }
 		
 		if(Input.GetMouseButton(0))
         {
-			Camera.main.transform.Translate((.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-			Camera.main.transform.Translate(-(.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-			//combines the previous 2 lines into 1
-			//Camera.main.transform.Translate((.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
-			
+			if(canMove)
+			{
+				if(distanceTraveled.x + .25f * (Input.mousePosition.x - prevMousePosition.x) < 30 && distanceTraveled.x + .25f * (Input.mousePosition.x - prevMousePosition.x) > -30)
+				{
+					Camera.main.transform.Translate((.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.x += .25f * (Input.mousePosition.x - prevMousePosition.x);
+				}
+				if(distanceTraveled.y + .25f * (Input.mousePosition.y - prevMousePosition.y) < 30 && distanceTraveled.y + .25f * (Input.mousePosition.y - prevMousePosition.y) > -30)
+				{
+					Camera.main.transform.Translate(-(.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.y += .25f * (Input.mousePosition.y - prevMousePosition.y);
+				}
+			}
+            //combines the previous 2 lines into 1
+            //Camera.main.transform.Translate((.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
+			if(canMove || Vector2.Distance(Input.mousePosition, prevMousePosition) > 75)
+			{
+				prevMousePosition = Input.mousePosition;
+				canMove = true;
+			}
+        }
+		if(!Input.GetMouseButton(0))
+        {
+			canMove = false;
 		}
-		prevMousePosition = Input.mousePosition;
 	}
 
     private void SelectSoul(GameObject Soul)
