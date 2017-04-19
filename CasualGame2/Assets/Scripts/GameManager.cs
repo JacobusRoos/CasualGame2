@@ -182,9 +182,12 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "newsave.sav"));
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "save.sav"));
             SaveData save = new SaveData() {
                 CreationTimestamp = System.DateTime.UtcNow,
+                Ectoplasm = playerManager.Ectoplasm,
+                Level = playerManager.Level,
+                Experience = playerManager.Experience,
                 Plots = new Dictionary<SerializableVector3, SerializablePlot>()
             };
             foreach(var plotObj in playerManager.Plots)
@@ -218,9 +221,13 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "newsave.sav"));
+            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "save.sav"));
             object rawsave = bf.Deserialize(file);
             SaveData save = (SaveData)rawsave;
+            playerManager.ectoplasm = save.Ectoplasm;
+            playerManager.level = save.Level;
+            playerManager.experience = save.Experience;
+
             foreach(var plot in save.Plots)
             {
                 GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, plot.Key);
@@ -235,6 +242,7 @@ public class GameManager : MonoBehaviour
                     newSoul.timeToRipe = savedSoul.TimeToRipe;
                 }
             }
+            file.Close();
         }
         catch(FileNotFoundException)
         {

@@ -7,6 +7,11 @@ using UnityEngine;
 public struct SaveData
 {
     public DateTime CreationTimestamp { get; set; }
+
+    public float Ectoplasm { get; set; }
+    public int Level { get; set; }
+    public int Experience { get; set; }
+
     public Dictionary<SerializableVector3, SerializablePlot> Plots { get; set; }
 }
 
