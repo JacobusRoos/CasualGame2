@@ -18,7 +18,7 @@ public class PlayerManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        ectoplasm = 50;
+        ectoplasm = 40;
         level = 1;
         experience = 0;
         nextLevelExperience = 500;

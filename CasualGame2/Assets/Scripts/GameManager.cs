@@ -13,12 +13,18 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public Canvas GUICanvas;
 
-    public GameObject selectedSoul;
-    public Image selectedImage;
+    private GameObject selectedSoul;
+    public GameObject selectedImage;
     private bool soulIsSelected;
-	
+
+    public GameObject soulMenu;
+
 	private Vector3 prevMousePosition;
 	public Vector4 limit;
+	
+	private Vector2 distanceTraveled = new Vector2(0, 0);
+	
+	private bool canMove;
 
 	// Use this for initialization
 	void Start ()
@@ -26,16 +32,38 @@ public class GameManager : MonoBehaviour
         selectedSoul = null;
         soulIsSelected = false;
         LoadSave();
-	}
+        selectedImage.SetActive(false);
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        if (selectedSoul == null)
+        {
+            soulMenu.GetComponent<SoulMenu>().Hide();
+
+            soulIsSelected = false;
+
+            selectedSoul = null;
+
+            selectedImage.SetActive(false);
+        }
+
+        if(soulIsSelected)
+        {
+            soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+        }
+
 		if(Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if(Physics.Raycast(ray, out hit))
+
+            selectedImage.SetActive(false);
+
+
+
+            if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider.tag == "Soul")
                 {
@@ -46,8 +74,20 @@ public class GameManager : MonoBehaviour
                         playerManager.ChangeExperience(20);
                     }
                     hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
-                    Destroy(hit.collider.gameObject);
+					hit.collider.GetComponent<Soul>().Harvest();
+                    //Destroy(hit.collider.gameObject);
                 }
+                else
+                {
+                    soulMenu.GetComponent<SoulMenu>().Hide();
+
+                    soulIsSelected = false;
+
+                    selectedSoul = null;
+
+                    selectedImage.SetActive(false);
+                }
+
                 if (hit.collider.tag == "PlotPoint")
                 {
                     if (hit.collider.GetComponent<Plot>() == null)
@@ -70,12 +110,31 @@ public class GameManager : MonoBehaviour
 		
 		if(Input.GetMouseButton(0))
         {
-			Camera.main.transform.Translate((.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-			Camera.main.transform.Translate(-(.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+			if(canMove)
+			{
+				if(distanceTraveled.x + .25f * (Input.mousePosition.x - prevMousePosition.x) < 30 && distanceTraveled.x + .25f * (Input.mousePosition.x - prevMousePosition.x) > -30)
+				{
+					Camera.main.transform.Translate((.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.x += .25f * (Input.mousePosition.x - prevMousePosition.x);
+				}
+				if(distanceTraveled.y + .25f * (Input.mousePosition.y - prevMousePosition.y) < 30 && distanceTraveled.y + .25f * (Input.mousePosition.y - prevMousePosition.y) > -30)
+				{
+					Camera.main.transform.Translate(-(.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.y += .25f * (Input.mousePosition.y - prevMousePosition.y);
+				}
+			}
             //combines the previous 2 lines into 1
             //Camera.main.transform.Translate((.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (Input.mousePosition.y - prevMousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (Input.mousePosition.x - prevMousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
-            prevMousePosition = Input.mousePosition;
+			if(canMove || Vector2.Distance(Input.mousePosition, prevMousePosition) > 75)
+			{
+				prevMousePosition = Input.mousePosition;
+				canMove = true;
+			}
         }
+		if(!Input.GetMouseButton(0))
+        {
+			canMove = false;
+		}
 	}
 
     private void SelectSoul(GameObject Soul)
@@ -87,7 +146,28 @@ public class GameManager : MonoBehaviour
         Vector2 soulScreenpos = new Vector2(((viewPosition.x * GUIRect.sizeDelta.x) - (GUIRect.sizeDelta.x * .5f)), ((viewPosition.y * GUIRect.sizeDelta.y) - (GUIRect.sizeDelta.y * .5f)));
 
         selectedImage.GetComponent<RectTransform>().anchoredPosition = soulScreenpos;
+
+        selectedImage.SetActive(true);
+
+        selectedSoul = Soul;
+
+        soulIsSelected = true;
+
+        DisplaySelectedSoulInfo();
     }
+
+    private void DisplaySelectedSoulInfo()
+    {
+        soulMenu.GetComponent<SoulMenu>().Show();
+
+        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
+
+        soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+
+        soulMenu.transform.GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
+    }
+
+    
 
     /// <summary>
     /// Called automatically by Unity when the app is switched out of
