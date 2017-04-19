@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        //if he soul dies, hide the soul menu
         if (selectedSoul == null)
         {
             soulMenu.GetComponent<SoulMenu>().Hide();
@@ -42,18 +43,21 @@ public class GameManager : MonoBehaviour
 
             selectedImage.SetActive(false);
         }
-
+        
+        //if a soul is slected, update info
         if(soulIsSelected)
         {
-            soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+            soulMenu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
         }
+
+
 
 		if(Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            selectedImage.SetActive(false);
+            //selectedImage.SetActive(false);
 
 
 
@@ -134,14 +138,23 @@ public class GameManager : MonoBehaviour
     {
         soulMenu.GetComponent<SoulMenu>().Show();
 
-        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
+        soulMenu.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
 
-        soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+        soulMenu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
 
-        soulMenu.transform.GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
+        soulMenu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
     }
 
-    
+    public void ReapSoul()
+    {
+        if (selectedSoul.GetComponent<Soul>().timeToRipe <= 0)
+        {
+            playerManager.ChangeEctoplasm(selectedSoul.GetComponent<Soul>().ectoPerHarvest);
+            playerManager.ChangeExperience(20);
+        }
+        selectedSoul.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(selectedSoul.gameObject);
+        Destroy(selectedSoul.gameObject);
+    }
 
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things

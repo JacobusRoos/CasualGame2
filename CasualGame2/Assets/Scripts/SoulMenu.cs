@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ public class SoulMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         hidePosition = this.GetComponent<RectTransform>().anchoredPosition;
-        showPosition = new Vector2(hidePosition.x, hidePosition.y + 220);
+        showPosition = new Vector2(hidePosition.x, hidePosition.y + 160);
 	}
 	
 	// Update is called once per frame
