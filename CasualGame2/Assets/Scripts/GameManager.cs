@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         //if a soul is slected, update info
         if(soulIsSelected)
         {
-            soulMenu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+            soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
         }
 
 
@@ -138,11 +138,11 @@ public class GameManager : MonoBehaviour
     {
         soulMenu.GetComponent<SoulMenu>().Show();
 
-        soulMenu.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
+        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
 
-        soulMenu.transform.GetChild(0).GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+        soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
 
-        soulMenu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
+        soulMenu.transform.GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
     }
 
     public void ReapSoul()
