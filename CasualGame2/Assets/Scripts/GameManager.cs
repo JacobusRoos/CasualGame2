@@ -176,14 +176,6 @@ public class GameManager : MonoBehaviour
     public void ToggleQuickHarvest()
 	{
 		quickHarvest = !quickHarvest;
-		if(quickHarvest)
-		{
-			quickHarvestButton.gameObject.GetComponent<Image>().color = new Color(208f/255, 200f/255, 251f/255, 1);
-		}
-		else
-		{
-			quickHarvestButton.gameObject.GetComponent<Image>().color = Color.white;
-		}
 	}
 
     /// <summary>
