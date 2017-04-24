@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -180,10 +181,19 @@ public class GameManager : MonoBehaviour
 		quickHarvest = !quickHarvest;
 	}
     
+    void OnApplicationFocus(bool gainedFocus)
+    {
+        if (!gainedFocus) SaveGame();
+    }
 	
     void OnApplicationPause(bool pausing)
     {
         if (pausing) SaveGame();
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveGame();
     }
 
     public void SaveGame()
@@ -237,6 +247,9 @@ public class GameManager : MonoBehaviour
             playerManager.level = save.Level;
             playerManager.experience = save.Experience;
 
+            TimeSpan ts = DateTime.UtcNow - save.CreationTimestamp;
+            float deltaTime = (float)ts.TotalSeconds;
+
             foreach(var plot in save.Plots)
             {
                 GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, plot.Key);
@@ -247,8 +260,10 @@ public class GameManager : MonoBehaviour
                     Soul newSoul = instantiatedSoul.GetComponent<Soul>();
                     newSoul.ectoPerHarvest = savedSoul.EctoPerHarvest;
                     newSoul.ectoPerSecond = savedSoul.EctoPerSecond;
-                    newSoul.lifespan = savedSoul.Lifespan;
-                    newSoul.timeToRipe = savedSoul.TimeToRipe;
+                    newSoul.lifespan = savedSoul.Lifespan - deltaTime;
+                    newSoul.timeToRipe = savedSoul.TimeToRipe - deltaTime;
+                    if (newSoul.lifespan < 0) playerManager.ectoplasm += savedSoul.Lifespan * newSoul.ectoPerSecond;
+                    else playerManager.ectoplasm += deltaTime * newSoul.ectoPerSecond;
                 }
             }
             file.Close();
