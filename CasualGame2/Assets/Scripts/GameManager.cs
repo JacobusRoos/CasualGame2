@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        //if he soul dies, hide the soul menu
         if (selectedSoul == null)
         {
             soulMenu.GetComponent<SoulMenu>().Hide();
@@ -54,18 +55,21 @@ public class GameManager : MonoBehaviour
 
             selectedImage.SetActive(false);
         }
-
+        
+        //if a soul is slected, update info
         if(soulIsSelected)
         {
             soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
         }
+
+
 
 		if(Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            selectedImage.SetActive(false);
+            //selectedImage.SetActive(false);
 
             if (Physics.Raycast(ray, out hit))
             {
@@ -276,6 +280,17 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("There was an error thrown by the OS when trying to load the save file! Exception: " + ex.Message);
         }
+	}
+	
+    public void ReapSoul()
+    {
+        if (selectedSoul.GetComponent<Soul>().timeToRipe <= 0)
+        {
+            playerManager.ChangeEctoplasm(selectedSoul.GetComponent<Soul>().ectoPerHarvest);
+            playerManager.ChangeExperience(20);
+        }
+        selectedSoul.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(selectedSoul.gameObject);
+        Destroy(selectedSoul.gameObject);
     }
 
     /// <summary>
