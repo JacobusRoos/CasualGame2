@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        ectoplasm = 50000;
+        ectoplasm = 50;
         level = 1;
         experience = 0;
         nextLevelExperience = 500;
@@ -56,6 +56,7 @@ public class PlayerManager : MonoBehaviour
         {
             LevelUp();
         }
+
 
         PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = GenerateEctoplasmString();
     }
@@ -138,7 +139,7 @@ public class PlayerManager : MonoBehaviour
 
         int tenFactor = 0;
 
-        int ectoplasmHolder = (int)ectoplasm;
+        long ectoplasmHolder = (long)ectoplasm;
 
         while(ectoplasmHolder > 1)
         {
@@ -147,17 +148,22 @@ public class PlayerManager : MonoBehaviour
             tenFactor++;
         }
 
+        Debug.Log(tenFactor);
+        
+
         if(tenFactor <= 4)
         {
             ectoplasmString = ((int)ectoplasm).ToString();
         }
         else
         {
-            ectoplasmHolder = (int)ectoplasm / (10 ^ (tenFactor - 3));
+            ectoplasmHolder = (long)ectoplasm / (long)(Mathf.Pow(10, tenFactor - 4));
 
 
-            ectoplasmString = (float)ectoplasmHolder / 1000 + ectoplasmNotation[tenFactor / 3];
+            ectoplasmString = ((float)ectoplasmHolder / (int)(Mathf.Pow(10, 3 - (tenFactor - 1) % 3))) + ectoplasmNotation[(tenFactor - 4) / 3];
         }
+
+        
 
         return ectoplasmString;
     }
