@@ -15,6 +15,12 @@ public class Plot : MonoBehaviour
         soulContent = new List<GameObject>();
 	}
 	
+	public void OnClick()
+	{
+		Debug.Log("Click On Plot - " + gameObject.name);
+		AddToPlot(playerManager.gameManager.soulPrefab);
+	}
+	
 	// Update is called once per frame
 	void Update ()
     {
@@ -35,7 +41,7 @@ public class Plot : MonoBehaviour
             foreach(GameObject obj in soulContent)
             {
                 int pos = (int)((obj.transform.localPosition.x + 2f) / 4f);
-                int pos2 = -(int)((obj.transform.localPosition.z - (spread * (capacity / 2) - 1)) / (spread * 2));
+                int pos2 = -(int)((obj.transform.localPosition.y - (spread * (capacity / 2) - 1)) / (spread * 2));
                 freePositions[(pos) + (pos2 * 2)] = false;
             }
             int closestFree = 0;
@@ -43,7 +49,7 @@ public class Plot : MonoBehaviour
             {
                 closestFree++;
             }
-            newSoul.transform.localPosition = new Vector3(-2f + (float)((closestFree % 2) * 4), 2, (spread * (capacity / 2) - 1) - (Mathf.Floor(closestFree / 2) * (spread * 2)));
+            newSoul.transform.localPosition = new Vector3(-2f + (float)((closestFree % 2) * 4), (spread * (capacity / 2) - 1) - (Mathf.Floor(closestFree / 2) * (spread * 2)), -2);
             newSoul.GetComponent<Soul>().plot = gameObject;
             playerManager.ChangeEctoplasm(-newSoul.GetComponent<Soul>().cost);
             playerManager.ChangeExperience(10);

@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     public int experience;
     int nextLevelExperience;
     int maxPlots = 2;
-    GameManager gameManager;
+    public GameManager gameManager;
     List<GameObject> plotList = new List<GameObject>();
     public List<int> levelUnlocks = new List<int>();
     public List<GameObject> levelSouls = new List<GameObject>();
@@ -47,11 +47,12 @@ public class PlayerManager : MonoBehaviour
         }
 	}
 
-    public void AddPlot(GameObject plot, Vector3 position)
+    public void AddPlot(GameObject plot, GameObject parent)
     {
         if (!IsFull && CanAfford(plot.GetComponent<Plot>().cost))
         {
-            GameObject newPlot = Instantiate(plot, position, Quaternion.identity);
+            GameObject newPlot = Instantiate(plot, parent.transform);
+			newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
             newPlot.GetComponent<Plot>().playerManager = this;
             ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost);
             ChangeExperience(150);
