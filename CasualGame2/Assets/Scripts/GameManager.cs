@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        Debug.Log(selectedSoul);
+
         if (selectedSoul == null)
         {
             soulMenu.GetComponent<SoulMenu>().Hide();
@@ -61,11 +63,9 @@ public class GameManager : MonoBehaviour
         {
             selectedImage.SetActive(false);
 
-            soulMenu.GetComponent<SoulMenu>().Hide();
-
             soulIsSelected = false;
 
-            selectedSoul = null;
+            
 					
 		    prevMousePosition = Input.mousePosition;
         }
@@ -116,6 +116,13 @@ public class GameManager : MonoBehaviour
         soulIsSelected = true;
 
         DisplaySelectedSoulInfo();
+    }
+
+    public void HarvestSelectedSoul()
+    {
+        selectedSoul.GetComponent<Soul>().Harvest();
+
+        selectedSoul = null;
     }
 
     private void DisplaySelectedSoulInfo()
