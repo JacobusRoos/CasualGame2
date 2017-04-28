@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        //if he soul dies, hide the soul menu
         if (selectedSoul == null)
         {
             soulMenu.GetComponent<SoulMenu>().Hide();
@@ -55,69 +54,22 @@ public class GameManager : MonoBehaviour
 
             selectedImage.SetActive(false);
         }
-        
-        //if a soul is slected, update info
+
         if(soulIsSelected)
         {
             soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
         }
 
-
-
 		if(Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            selectedImage.SetActive(false);
 
-            //selectedImage.SetActive(false);
+            soulMenu.GetComponent<SoulMenu>().Hide();
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.collider.tag == "Soul")
-                {
-					if(!quickHarvest)
-					{
-						SelectSoul(hit.collider.gameObject);
-					}
-					else
-					{
-						if (hit.collider.GetComponent<Soul>().timeToRipe <= 0)
-						{
-							playerManager.ChangeEctoplasm(hit.collider.GetComponent<Soul>().ectoPerHarvest);
-							playerManager.ChangeExperience(20);
-						}
-						hit.collider.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(hit.collider.gameObject);
-						hit.collider.GetComponent<Soul>().Harvest();
-					}
-                }
-                else
-                {
-                    soulMenu.GetComponent<SoulMenu>().Hide();
+            soulIsSelected = false;
 
-                    soulIsSelected = false;
-
-                    selectedSoul = null;
-
-                    selectedImage.SetActive(false);
-                }
-
-                if (hit.collider.tag == "PlotPoint")
-                {
-                    if (hit.collider.GetComponent<Plot>() == null)
-                    {
-                        hit.collider.transform.parent.parent.GetComponent<Plot>().AddToPlot(soulPrefab);
-                    }
-                    else
-                    {
-                        hit.collider.transform.parent.GetComponent<Plot>().AddToPlot(soulPrefab);
-                    }
-                }
-                if (hit.collider.tag == "Ground")
-                {
-                    Vector2 hitPoint = new Vector2(Mathf.Floor(hit.point.x / 10), Mathf.Floor(hit.point.z / 10));
-                    playerManager.AddPlot(plotPrefab, new Vector3((hitPoint.x * 10) + 5, 0.05f, (hitPoint.y * 10) + 5));
-                }
-            }
+            selectedSoul = null;
+					
 		    prevMousePosition = Input.mousePosition;
         }
 		
@@ -150,7 +102,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-    private void SelectSoul(GameObject Soul)
+    public void SelectSoul(GameObject Soul)
     {
         RectTransform GUIRect = GUICanvas.GetComponent<RectTransform>();
 
@@ -281,18 +233,14 @@ public class GameManager : MonoBehaviour
             Debug.Log("There was an error thrown by the OS when trying to load the save file! Exception: " + ex.Message);
         }
 	}
-	
-    public void ReapSoul()
-    {
-        if (selectedSoul.GetComponent<Soul>().timeToRipe <= 0)
-        {
-            playerManager.ChangeEctoplasm(selectedSoul.GetComponent<Soul>().ectoPerHarvest);
-            playerManager.ChangeExperience(20);
-        }
-        selectedSoul.GetComponent<Soul>().plot.GetComponent<Plot>().RemoveFromPlot(selectedSoul.gameObject);
-        Destroy(selectedSoul.gameObject);
-    }
 
+    public bool QuickHarvest
+	{
+		get
+		{
+			return quickHarvest;
+		}
+	}
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
     /// </summary>

@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     public int experience;
     int nextLevelExperience;
     int maxPlots = 2;
-    GameManager gameManager;
+    public GameManager gameManager;
     List<GameObject> plotList = new List<GameObject>();
     public List<int> levelUnlocks = new List<int>();
     public List<GameObject> levelSouls = new List<GameObject>();
@@ -57,14 +57,16 @@ public class PlayerManager : MonoBehaviour
             LevelUp();
         }
 
+
         PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = GenerateEctoplasmString();
     }
 
-    public void AddPlot(GameObject plot, Vector3 position)
+    public void AddPlot(GameObject plot, GameObject parent)
     {
         if (!IsFull && CanAfford(plot.GetComponent<Plot>().cost))
         {
-            GameObject newPlot = Instantiate(plot, position, Quaternion.identity);
+            GameObject newPlot = Instantiate(plot, parent.transform);
+			newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
             newPlot.GetComponent<Plot>().playerManager = this;
             ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost);
             ChangeExperience(150);
@@ -151,7 +153,7 @@ public class PlayerManager : MonoBehaviour
 
         int tenFactor = 0;
 
-        int ectoplasmHolder = (int)ectoplasm;
+        long ectoplasmHolder = (long)ectoplasm;
 
         while(ectoplasmHolder > 1)
         {
@@ -160,17 +162,22 @@ public class PlayerManager : MonoBehaviour
             tenFactor++;
         }
 
+        Debug.Log(tenFactor);
+        
+
         if(tenFactor <= 4)
         {
             ectoplasmString = ((int)ectoplasm).ToString();
         }
         else
         {
-            ectoplasmHolder = (int)ectoplasm / (10 ^ (tenFactor - 3));
+            ectoplasmHolder = (long)ectoplasm / (long)(Mathf.Pow(10, tenFactor - 4));
 
 
-            ectoplasmString = (float)ectoplasmHolder / 1000 + ectoplasmNotation[tenFactor / 3];
+            ectoplasmString = ((float)ectoplasmHolder / (int)(Mathf.Pow(10, 3 - (tenFactor - 1) % 3))) + ectoplasmNotation[(tenFactor - 4) / 3];
         }
+
+        
 
         return ectoplasmString;
     }

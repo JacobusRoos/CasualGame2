@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Soul : MonoBehaviour
@@ -18,40 +19,58 @@ public class Soul : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        baseColor = transform.GetChild(0).GetComponent<SpriteRenderer>().color;
+        baseColor = transform.GetComponent<Image>().color;
         //transform.parent = null;
-        transform.localRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+        //transform.localRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
         //transform.parent = plot.transform;
 
     }
+	
+	public void OnClick()
+	{
+		Debug.Log("Click On Soul - " + gameObject.name);
+		if(!plot.GetComponent<Plot>().playerManager.gameManager.QuickHarvest)
+		{
+			plot.GetComponent<Plot>().playerManager.gameManager.SelectSoul(gameObject);
+		}
+		else
+		{
+			if (timeToRipe <= 0)
+			{
+				plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest);
+				plot.GetComponent<Plot>().playerManager.ChangeExperience(20);
+			}
+			plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
+			Harvest();
+		}
+	}
 
     // Update is called once per frame
     void Update()
     {
 		if(animateDeath)
 		{
-			transform.localScale += new Vector3(0.2f, 0.2f, 0);
-			transform.position += new Vector3(0, .1f, 0);
-			Color color = transform.GetChild(0).GetComponent<SpriteRenderer>().color;
+			transform.localScale += new Vector3(0.002f, 0.004f, 0);
+			transform.position += new Vector3(0, 0, 0.01f);
+			Color color = transform.GetComponent<Image>().color;
 			color.a -= .02f;
-			transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
-			if(transform.localScale.x > 8)
+			transform.GetComponent<Image>().color = color;
+			if(color.a <= 0)
 			{
 				Destroy(gameObject);
 			}
 		}
 		else
 		{
-			
 			lifespan -= Time.deltaTime;
 			timeToRipe -= Time.deltaTime;
 			if(timeToRipe <= 0)
 			{
-				transform.GetChild(0).GetComponent<SpriteRenderer>().color = matureColor;
+				transform.GetComponent<Image>().color = matureColor;
 			}
 			else
 			{
-				transform.GetChild(0).GetComponent<SpriteRenderer>().color = baseColor;
+				transform.GetComponent<Image>().color = baseColor;
 			}
 			if (lifespan <= 0)
 			{
@@ -64,6 +83,6 @@ public class Soul : MonoBehaviour
 	public void Harvest()
 	{
 		animateDeath = true;
-		GetComponent<BoxCollider>().enabled = false;
+		GetComponent<Button>().enabled = false;
 	}
 }
