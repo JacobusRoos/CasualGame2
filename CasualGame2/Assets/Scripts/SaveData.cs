@@ -12,7 +12,7 @@ public struct SaveData
     public int Level { get; set; }
     public int Experience { get; set; }
 
-    public Dictionary<SerializableVector3, SerializablePlot> Plots { get; set; }
+    public Dictionary<int, SerializablePlot> Plots { get; set; }
 }
 
 [System.Serializable]

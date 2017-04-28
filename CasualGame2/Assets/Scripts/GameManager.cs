@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     {
         selectedSoul = null;
         soulIsSelected = false;
-        LoadSave();
+        //LoadSave();
         selectedImage.SetActive(false);
 		
 		quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
@@ -163,7 +163,7 @@ public class GameManager : MonoBehaviour
                 Ectoplasm = playerManager.Ectoplasm,
                 Level = playerManager.Level,
                 Experience = playerManager.Experience,
-                Plots = new Dictionary<SerializableVector3, SerializablePlot>()
+                Plots = new Dictionary<int, SerializablePlot>()
             };
             foreach(var plotObj in playerManager.Plots)
             {
@@ -180,7 +180,8 @@ public class GameManager : MonoBehaviour
                     };
                     splot.Souls[i] = ssoul;
                 }
-                save.Plots.Add(plotObj.transform.position, splot);
+                var parentGrid = plotObj.GetComponentInParent<GridPart>();
+                save.Plots.Add(parentGrid.GetInstanceID(), splot);
             }
             bf.Serialize(file, save);
             file.Close();
@@ -208,7 +209,7 @@ public class GameManager : MonoBehaviour
 
             foreach(var plot in save.Plots)
             {
-                GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, plot.Key);
+                GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, Vector3.one);
                 Plot newPlot = instantiated.GetComponent<Plot>();
                 foreach(var savedSoul in plot.Value.Souls)
                 {
