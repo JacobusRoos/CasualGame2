@@ -14,6 +14,7 @@ public class PlayerManager : MonoBehaviour
     List<GameObject> plotList = new List<GameObject>();
     public List<int> levelUnlocks = new List<int>();
     public List<GameObject> levelSouls = new List<GameObject>();
+    Dictionary<int, GridPart> idToGrid = new Dictionary<int, GridPart>();
 
     public GameObject PlayerInfoUI;
 
@@ -34,6 +35,12 @@ public class PlayerManager : MonoBehaviour
         PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = (int)(ectoplasm) + "";
 
         ectoplasmNotation = new string[]{ "K", "M", "B", "T", "Qa", "Qi"};
+
+        var grid = GameObject.FindGameObjectWithTag("Grid");
+        foreach(var cell in grid.GetComponentsInChildren<GridPart>())
+        {
+            idToGrid.Add(cell.GetInstanceID(), cell);
+        }
 	}
 	
 	// Update is called once per frame
@@ -74,9 +81,11 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public GameObject AddPlotDirect(GameObject plot, Vector3 position)
+    public GameObject AddPlotDirect(GameObject plot, int parentId)
     {
-        GameObject newPlot = Instantiate(plot, position, Quaternion.identity);
+        GridPart parent = idToGrid[parentId];
+        GameObject newPlot = Instantiate(plot, parent.transform);
+        newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
         newPlot.GetComponent<Plot>().playerManager = this;
         plotList.Add(newPlot);
         return newPlot;

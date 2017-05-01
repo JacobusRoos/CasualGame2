@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     {
         selectedSoul = null;
         soulIsSelected = false;
-        //LoadSave();
+        LoadSave();
         selectedImage.SetActive(false);
 		
 		quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "save.sav"));
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "newsave.sav"));
             SaveData save = new SaveData() {
                 CreationTimestamp = System.DateTime.UtcNow,
                 Ectoplasm = playerManager.Ectoplasm,
@@ -204,7 +204,7 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "save.sav"));
+            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "newsave.sav"));
             object rawsave = bf.Deserialize(file);
             SaveData save = (SaveData)rawsave;
             playerManager.ectoplasm = save.Ectoplasm;
@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviour
 
             foreach(var plot in save.Plots)
             {
-                GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, Vector3.one);
+                GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, plot.Key);
                 Plot newPlot = instantiated.GetComponent<Plot>();
                 foreach(var savedSoul in plot.Value.Souls)
                 {
