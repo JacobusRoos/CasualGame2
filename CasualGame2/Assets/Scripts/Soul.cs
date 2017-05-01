@@ -40,7 +40,6 @@ public class Soul : MonoBehaviour
 				plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest);
 				plot.GetComponent<Plot>().playerManager.ChangeExperience(20);
 			}
-			plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
 			Harvest();
 		}
 	}
@@ -84,5 +83,6 @@ public class Soul : MonoBehaviour
 	{
 		animateDeath = true;
 		GetComponent<Button>().enabled = false;
-	}
+        plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
+    }
 }
