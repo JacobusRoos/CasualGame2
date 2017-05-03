@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour
     public List<GameObject> levelSouls = new List<GameObject>();
 
     public GameObject PlayerInfoUI;
+    public GameObject CharacterMenu;
 
     private string[] ectoplasmNotation;
 
@@ -29,9 +30,7 @@ public class PlayerManager : MonoBehaviour
          
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
-        PlayerInfoUI.transform.GetChild(0).GetComponent<Text>().text = "Level " + level;
-
-        PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = (int)(ectoplasm) + "";
+        UpdateUI();
 
         ectoplasmNotation = new string[]{ "K", "M", "B", "T", "Qa", "Qi"};
 	}
@@ -57,8 +56,21 @@ public class PlayerManager : MonoBehaviour
             LevelUp();
         }
 
+        UpdateUI();
+    }
 
-        PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = GenerateEctoplasmString();
+    public void UpdateUI()
+    {
+        PlayerInfoUI.transform.GetChild(0).GetComponent<Text>().text = "Level " + level;
+        PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = GenerateEctoplasmString() + " Ecto";
+        PlayerInfoUI.transform.GetChild(2).GetComponent<Slider>().value = experience;
+        PlayerInfoUI.transform.GetChild(2).GetComponent<Slider>().maxValue = nextLevelExperience;
+
+        CharacterMenu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = "Level " + level;
+        CharacterMenu.transform.GetChild(0).GetChild(3).GetComponent<Slider>().value = experience;
+        CharacterMenu.transform.GetChild(0).GetChild(3).GetComponent<Slider>().maxValue = nextLevelExperience;
+        CharacterMenu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = experience + "/" + nextLevelExperience;
+        CharacterMenu.transform.GetChild(0).GetChild(5).GetComponent<Text>().text = "Ectoplasm : " + GenerateEctoplasmString() + "";
     }
 
     public void AddPlot(GameObject plot, GameObject parent)
@@ -138,7 +150,7 @@ public class PlayerManager : MonoBehaviour
     {
         string ectoplasmString = "";
 
-        int tenFactor = 0;
+        int tenFactor = 2;
 
         long ectoplasmHolder = (long)ectoplasm;
 

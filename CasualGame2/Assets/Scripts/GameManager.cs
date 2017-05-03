@@ -28,8 +28,10 @@ public class GameManager : MonoBehaviour
 	
 	private Button quickHarvestButton;
 
-	// Use this for initialization
-	void Start ()
+    public GameObject CharacterMenu;
+
+    // Use this for initialization
+    void Start ()
     {
         selectedSoul = null;
         soulIsSelected = false;
@@ -148,6 +150,11 @@ public class GameManager : MonoBehaviour
 			return quickHarvest;
 		}
 	}
+
+    public void SetCharacterMenu(bool activation)
+    {
+        CharacterMenu.SetActive(activation);
+    }
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
     /// </summary>

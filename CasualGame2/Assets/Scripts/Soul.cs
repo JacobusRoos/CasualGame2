@@ -15,12 +15,14 @@ public class Soul : MonoBehaviour
     public Color matureColor;
 	bool animateDeath = false;
 
+    public GameObject soulFade;
+
     // Use this for initialization
     void Start ()
     {
         baseColor = transform.GetComponent<Image>().color;
         //transform.parent = null;
-        //transform.localRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+        transform.rotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
         //transform.parent = plot.transform;
 
     }
@@ -34,11 +36,6 @@ public class Soul : MonoBehaviour
 		}
 		else
 		{
-			if (timeToRipe <= 0)
-			{
-				plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest);
-				plot.GetComponent<Plot>().playerManager.ChangeExperience(20);
-			}
 			Harvest();
 		}
 	}
@@ -48,7 +45,7 @@ public class Soul : MonoBehaviour
     {
 		if(animateDeath)
 		{
-			transform.localScale += new Vector3(0.002f, 0.004f, 0);
+			transform.localScale += new Vector3(0.002f, 0.002f, 0);
 			transform.position += new Vector3(0, 0, 0.01f);
 			Color color = transform.GetComponent<Image>().color;
 			color.a -= .02f;
@@ -80,8 +77,16 @@ public class Soul : MonoBehaviour
 	
 	public void Harvest()
 	{
-		animateDeath = true;
-		GetComponent<Button>().enabled = false;
+		if (timeToRipe <= 0)
+		{
+			plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest);
+			plot.GetComponent<Plot>().playerManager.ChangeExperience(20);
+		}
+		//animateDeath = true;
+		//GetComponent<Button>().enabled = false;
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
+        GameObject fade = Instantiate(soulFade, transform.position, transform.rotation);
+        fade.GetComponent<SpriteRenderer>().color = transform.GetComponent<Image>().color;
+        Destroy(gameObject);
     }
 }
