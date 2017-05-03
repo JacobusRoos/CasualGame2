@@ -189,7 +189,7 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "newsave.sav"));
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "newsave3.sav"));
             SaveData save = new SaveData() {
                 CreationTimestamp = System.DateTime.UtcNow,
                 Ectoplasm = playerManager.Ectoplasm,
@@ -208,7 +208,9 @@ public class GameManager : MonoBehaviour
                         EctoPerHarvest = soul.ectoPerHarvest,
                         EctoPerSecond = soul.ectoPerSecond,
                         Lifespan = soul.lifespan,
-                        TimeToRipe = soul.timeToRipe
+                        TimeToRipe = soul.timeToRipe,
+                        BaseColor = soul.baseColor,
+                        MatureColor = soul.matureColor
                     };
                     splot.Souls[i] = ssoul;
                 }
@@ -229,7 +231,7 @@ public class GameManager : MonoBehaviour
         try
         {
             System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "newsave.sav"));
+            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "newsave3.sav"));
             object rawsave = bf.Deserialize(file);
             SaveData save = (SaveData)rawsave;
             playerManager.ectoplasm = save.Ectoplasm;
@@ -251,6 +253,9 @@ public class GameManager : MonoBehaviour
                     newSoul.ectoPerSecond = savedSoul.EctoPerSecond;
                     newSoul.lifespan = savedSoul.Lifespan - deltaTime;
                     newSoul.timeToRipe = savedSoul.TimeToRipe - deltaTime;
+                    newSoul.baseColor = savedSoul.BaseColor;
+                    newSoul.transform.GetComponent<Image>().color = savedSoul.BaseColor;
+                    newSoul.matureColor = savedSoul.MatureColor;
                     if (newSoul.lifespan < 0) playerManager.ectoplasm += savedSoul.Lifespan * newSoul.ectoPerSecond;
                     else playerManager.ectoplasm += deltaTime * newSoul.ectoPerSecond;
                 }

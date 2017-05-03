@@ -12,7 +12,7 @@ public class Soul : MonoBehaviour
     public float lifespan;
     public float timeToRipe;
     public GameObject plot;
-    Color baseColor;
+    public Color baseColor;
     public Color matureColor;
 	bool animateDeath = false;
 

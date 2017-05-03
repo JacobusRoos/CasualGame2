@@ -15,6 +15,25 @@ public struct SaveData
     public Dictionary<int, SerializablePlot> Plots { get; set; }
 }
 
+[Serializable]
+public struct SerializableColor
+{
+    public float R { get; set; }
+    public float G { get; set; }
+    public float B { get; set; }
+    public float A { get; set; }
+
+    public static implicit operator Color(SerializableColor c)
+    {
+        return new Color(c.R, c.G, c.B, c.A);
+    }
+
+    public static implicit operator SerializableColor(Color c)
+    {
+        return new SerializableColor() { R = c.r, G = c.g, B = c.b, A = c.a };
+    }
+}
+
 [System.Serializable]
 public struct SerializableVector3
 {
@@ -46,4 +65,7 @@ public struct SerializableSoul
     public float EctoPerHarvest { get; set; }
     public float Lifespan { get; set; }
     public float TimeToRipe { get; set; }
+
+    public SerializableColor BaseColor { get; set; }
+    public SerializableColor MatureColor { get; set; }
 }
