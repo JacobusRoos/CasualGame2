@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 	private bool canMove;
 	private bool quickHarvest = false;
 	
-	private Button quickHarvestButton;
+	//private Button quickHarvestButton;
 
     private PointerEventData pointerData;
 
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
         initialTag = "";
         initialRay = 0;
 
-        quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
+        //quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
     }
 	
 	// Update is called once per frame

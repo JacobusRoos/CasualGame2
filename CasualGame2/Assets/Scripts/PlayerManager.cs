@@ -22,7 +22,7 @@ public class PlayerManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        ectoplasm = 40;
+        ectoplasm = 40.01f;
         level = 1;
         experience = 0;
         nextLevelExperience = 500;
@@ -142,19 +142,19 @@ public class PlayerManager : MonoBehaviour
 
         long ectoplasmHolder = (long)ectoplasm;
 
-        while(ectoplasmHolder > 1)
+        while(ectoplasmHolder >= 1)
         {
             ectoplasmHolder /= 10;
 
             tenFactor++;
         }
-
-        //Debug.Log(tenFactor);
         
 
         if(tenFactor <= 4)
         {
-            ectoplasmString = ((int)ectoplasm).ToString();
+            //Debug.Log(tenFactor);
+
+            ectoplasmString = ((int) (ectoplasm * Mathf.Pow(10, 4 - tenFactor)) / Mathf.Pow(10, 4 - tenFactor)).ToString();
         }
         else
         {

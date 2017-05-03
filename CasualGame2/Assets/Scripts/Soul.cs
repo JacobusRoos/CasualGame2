@@ -23,6 +23,9 @@ public class Soul : MonoBehaviour
         //transform.localRotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
         //transform.parent = plot.transform;
 
+        ectoPerSecond = 2;
+
+        ectoPerHarvest = 10;
     }
 	
 	public void OnClick()
