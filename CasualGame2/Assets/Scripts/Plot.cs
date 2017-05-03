@@ -29,7 +29,7 @@ public class Plot : MonoBehaviour
 
     public void AddToPlot(GameObject soul)
     {
-        if (!IsFull() && playerManager.CanAfford(soul.GetComponent<Soul>().cost))
+        if (!playerManager.GetComponent<PlayerManager>().gameManager.GetComponent<GameManager>().QuickHarvest && !IsFull() && playerManager.CanAfford(soul.GetComponent<Soul>().cost ))
         {
             GameObject newSoul = Instantiate(soul, transform);
             bool[] freePositions = new bool[capacity];
