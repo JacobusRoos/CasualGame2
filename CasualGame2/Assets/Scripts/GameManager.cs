@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -30,23 +31,35 @@ public class GameManager : MonoBehaviour
 	
 	private Button quickHarvestButton;
 
-	// Use this for initialization
-	void Start ()
+    private PointerEventData pointerData;
+
+    private List<RaycastResult> rayResults;
+
+    private string initialTag;
+    private int initialRay;
+
+    // Use this for initialization
+    void Start ()
     {
         selectedSoul = null;
         soulIsSelected = false;
         LoadSave();
         selectedImage.SetActive(false);
-		
-		quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
+
+        rayResults = new List<RaycastResult>();
+
+        initialTag = "";
+        initialRay = 0;
+
+        quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-        Debug.Log(selectedSoul);
+        //Debug.Log(selectedSoul);
 
-        if (selectedSoul == null)
+        if (selectedSoul == null || !soulIsSelected)
         {
             soulMenu.GetComponent<SoulMenu>().Hide();
 
@@ -62,20 +75,32 @@ public class GameManager : MonoBehaviour
             soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
         }
 
-		if(Input.GetMouseButtonDown(0))
+        
+
+        if (Input.GetMouseButtonDown(0))
         {
-            selectedImage.SetActive(false);
+            pointerData = new PointerEventData(EventSystem.current);
 
-            soulIsSelected = false;
+            pointerData.position = Input.mousePosition;
 
-            
-					
-		    prevMousePosition = Input.mousePosition;
+            EventSystem.current.RaycastAll(pointerData, rayResults);
+
+            prevMousePosition = Input.mousePosition;
+
+            initialTag = rayResults[0].gameObject.tag;
+
+            initialRay = rayResults.Count;
         }
 		
 		if(Input.GetMouseButton(0))
         {
-			if(canMove)
+            
+            if (initialRay == 0 || initialTag == "PlotPoint")
+            {
+                soulIsSelected = false;
+            }
+
+            if (canMove)
 			{
 				if(distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) < 30 && distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) > -30)
 				{
@@ -90,7 +115,7 @@ public class GameManager : MonoBehaviour
 			}
             //combines the previous 2 lines into 1
             //Camera.main.transform.Translate((.5f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
-			if(canMove || Vector2.Distance(Input.mousePosition, prevMousePosition) > 10)
+			if(canMove || Vector2.Distance(Input.mousePosition, prevMousePosition) > 10 && (initialRay == 0 || initialTag == "PlotPoint"))
 			{
 				prevMousePosition = Input.mousePosition;
 				canMove = true;

@@ -171,7 +171,7 @@ public class PlayerManager : MonoBehaviour
             tenFactor++;
         }
 
-        Debug.Log(tenFactor);
+        //Debug.Log(tenFactor);
         
 
         if(tenFactor <= 4)
