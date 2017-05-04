@@ -24,7 +24,6 @@ public class Soul : MonoBehaviour
         //transform.parent = null;
         transform.rotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
         //transform.parent = plot.transform;
-
     }
 	
 	public void OnClick()
@@ -79,11 +78,9 @@ public class Soul : MonoBehaviour
 	{
 		if (timeToRipe <= 0)
 		{
-			plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest);
+			plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest, true);
 			plot.GetComponent<Plot>().playerManager.ChangeExperience(20);
 		}
-		//animateDeath = true;
-		//GetComponent<Button>().enabled = false;
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
         GameObject fade = Instantiate(soulFade, transform.position, transform.rotation);
         fade.GetComponent<SpriteRenderer>().color = transform.GetComponent<Image>().color;
