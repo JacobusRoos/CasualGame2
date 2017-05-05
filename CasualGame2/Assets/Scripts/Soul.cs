@@ -79,7 +79,7 @@ public class Soul : MonoBehaviour
 		if (timeToRipe <= 0)
 		{
 			plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest, true);
-			plot.GetComponent<Plot>().playerManager.ChangeExperience(50);
+			plot.GetComponent<Plot>().playerManager.ChangeExperience(20);
 		}
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
         GameObject fade = Instantiate(soulFade, transform.position, transform.rotation);
