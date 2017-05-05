@@ -30,7 +30,7 @@ public class Plot : MonoBehaviour
 
     public void AddToPlot(GameObject soul)
     {
-        if (!IsFull() && playerManager.CanAfford(soul.GetComponent<Soul>().cost))
+        if (!playerManager.GetComponent<PlayerManager>().gameManager.GetComponent<GameManager>().QuickHarvest && !IsFull() && playerManager.CanAfford(soul.GetComponent<Soul>().cost ))
         {
             GameObject newSoul = Instantiate(soul, transform);
             bool[] freePositions = new bool[capacity];
@@ -52,7 +52,7 @@ public class Plot : MonoBehaviour
             }
             newSoul.transform.localPosition = new Vector3(-2f + (float)((closestFree % 2) * 4), (spread * (capacity / 2) - 1) - (Mathf.Floor(closestFree / 2) * (spread * 2)), -2);
             newSoul.GetComponent<Soul>().plot = gameObject;
-            playerManager.ChangeEctoplasm(-newSoul.GetComponent<Soul>().cost);
+            playerManager.ChangeEctoplasm(-newSoul.GetComponent<Soul>().cost, false);
             playerManager.ChangeExperience(10);
             soulContent.Add(newSoul);
         }

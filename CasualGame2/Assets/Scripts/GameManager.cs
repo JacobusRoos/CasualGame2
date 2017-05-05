@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 	private bool canMove;
 	private bool quickHarvest = false;
 	
-	private Button quickHarvestButton;
+	//private Button quickHarvestButton;
 
     private PointerEventData pointerData;
 
@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
 
     private string initialTag;
     private int initialRay;
+
+    public GameObject CharacterMenu;
 
     // Use this for initialization
     void Start ()
@@ -51,7 +53,7 @@ public class GameManager : MonoBehaviour
         initialTag = "";
         initialRay = 0;
 
-        quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
+        //quickHarvestButton = GameObject.Find("GUI").transform.FindChild("QuickHarvest").GetComponent<Button>();
     }
 	
 	// Update is called once per frame
@@ -278,7 +280,12 @@ public class GameManager : MonoBehaviour
 		{
 			return quickHarvest;
 		}
-	}
+    }
+
+    public void SetCharacterMenu(bool activation)
+    {
+        CharacterMenu.SetActive(activation);
+    }
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
     /// </summary>
