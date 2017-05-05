@@ -17,7 +17,6 @@ public class Plot : MonoBehaviour
 	
 	public void OnClick()
 	{
-		Debug.Log("Click On Plot - " + gameObject.name);
 		AddToPlot(playerManager.gameManager.soulPrefab);
 	}
 	
