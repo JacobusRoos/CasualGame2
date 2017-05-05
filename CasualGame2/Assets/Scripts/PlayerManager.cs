@@ -29,14 +29,14 @@ public class PlayerManager : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        ectoplasm = 40;
+        ectoplasm = 50;
         level = 1;
         experience = 0;
         nextLevelExperience = 500;
 
         scytheRank = 1;
-        maxScytheRank = 1.1f;
-        nextScytheLevel = 3;
+        maxScytheRank = 1;
+        nextScytheLevel = 2;
          
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 		for(int i = 0; i < startingStuff.Count; i++)
@@ -100,43 +100,45 @@ public class PlayerManager : MonoBehaviour
         PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = GenerateEctoplasmString() + " Ecto";
         PlayerInfoUI.transform.GetChild(2).GetComponent<Slider>().value = experience;
         PlayerInfoUI.transform.GetChild(2).GetComponent<Slider>().maxValue = nextLevelExperience;
+        PlayerInfoUI.transform.GetChild(4).GetComponent<Text>().text = (maxPlots - plotList.Count) + "/" + maxPlots;
 
         CharacterMenu.transform.GetChild(0).GetChild(2).GetComponent<Text>().text = "Level " + level;
         CharacterMenu.transform.GetChild(0).GetChild(3).GetComponent<Slider>().value = experience;
         CharacterMenu.transform.GetChild(0).GetChild(3).GetComponent<Slider>().maxValue = nextLevelExperience;
         CharacterMenu.transform.GetChild(0).GetChild(4).GetComponent<Text>().text = experience + "/" + nextLevelExperience;
         CharacterMenu.transform.GetChild(0).GetChild(5).GetComponent<Text>().text = "Ectoplasm : " + GenerateEctoplasmString() + "";
-        CharacterMenu.transform.GetChild(0).GetChild(6).GetChild(2).GetComponent<Text>().text = scytheRank + "x";
+        CharacterMenu.transform.GetChild(0).GetChild(7).GetComponent<Text>().text = (maxPlots - plotList.Count) + "/" + maxPlots;
+        CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(2).GetComponent<Text>().text = scytheRank + "x";
         if(scytheRank < maxScytheRank)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(6).GetChild(3).GetComponent<Image>().color = new Color(1, 1, 1, 1);
-            CharacterMenu.transform.GetChild(0).GetChild(6).GetChild(4).GetComponent<Text>().text = "Cost : " + nextScytheCost();
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(4).GetComponent<Text>().text = "Cost : " + nextScytheCost();
         }
         else
         {
-            CharacterMenu.transform.GetChild(0).GetChild(6).GetChild(3).GetComponent<Image>().color = new Color(1, 0, 0, 200f/255);
-            CharacterMenu.transform.GetChild(0).GetChild(6).GetChild(4).GetComponent<Text>().text = "Unlock an upgrade at level " + nextScytheLevel;
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetComponent<Image>().color = new Color(1, 0, 0, 200f/255);
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(4).GetComponent<Text>().text = "Unlock an upgrade at level " + nextScytheLevel;
         }
 
         if (level >= 3)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(7).GetChild(1).GetChild(1).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(7).GetChild(1).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(1).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(1).GetChild(3).gameObject.SetActive(false);
         }
         if (level >= 7)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(7).GetChild(2).GetChild(1).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(7).GetChild(2).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(2).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(2).GetChild(3).gameObject.SetActive(false);
         }
         if (level >= 5)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(1).GetChild(1).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(1).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(1).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(1).GetChild(3).gameObject.SetActive(false);
         }
         if (level >= 10)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(2).GetChild(1).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(2).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(2).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(2).GetChild(3).gameObject.SetActive(false);
         }
     }
 
@@ -225,6 +227,12 @@ public class PlayerManager : MonoBehaviour
 				availableSouls.Add(levelObjects[levelUnlocks.IndexOf(level)]);
 			}
             //gameManager.soulPrefab = levelSouls[levelUnlocks.IndexOf(level)];
+        }
+
+        if(level == nextScytheLevel)
+        {
+            maxScytheRank += .1f;
+            nextScytheLevel += 3;
         }
     }
 
