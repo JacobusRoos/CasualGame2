@@ -11,8 +11,8 @@ public class CharacterMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        showPosition = this.GetComponent<RectTransform>().anchoredPosition;
-        hidePosition = new Vector2(showPosition.x + GUITransform.rect.width, hidePosition.y);
+        showPosition = new Vector2(0, 0);
+        hidePosition = new Vector2(GUITransform.rect.width, 0);
 	}
 	
 	// Update is called once per frame

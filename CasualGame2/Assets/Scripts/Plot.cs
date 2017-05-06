@@ -6,6 +6,7 @@ public class Plot : MonoBehaviour
 {
     public int cost;
     public int capacity;
+    public float extraMult;
     public PlayerManager playerManager;
     List<GameObject> soulContent = new List<GameObject>();
 
@@ -17,7 +18,6 @@ public class Plot : MonoBehaviour
 	
 	public void OnClick()
 	{
-		Debug.Log("Click On Plot - " + gameObject.name);
 		AddToPlot(playerManager.gameManager.soulPrefab);
 	}
 	

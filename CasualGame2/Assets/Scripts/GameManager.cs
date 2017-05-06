@@ -192,6 +192,7 @@ public class GameManager : MonoBehaviour
         else
         {
             characterMenu.GetComponent<CharacterMenu>().Hide();
+            activation = true;
         }
     }
     /// <summary>
