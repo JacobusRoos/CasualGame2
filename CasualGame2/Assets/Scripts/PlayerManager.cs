@@ -76,8 +76,8 @@ public class PlayerManager : MonoBehaviour
     {
         if (scytheRank < maxScytheRank && ectoplasm >= nextScytheCost())
         {
-            scytheRank += .1f;
             ectoplasm -= nextScytheCost();
+            scytheRank += .1f;
         }
     }
 
@@ -98,34 +98,36 @@ public class PlayerManager : MonoBehaviour
         CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(2).GetComponent<Text>().text = scytheRank + "x";
         if (scytheRank < maxScytheRank)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetComponent<Image>().color = new Color(1, 1, 1, 200f/255);
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetChild(0).GetComponent<Image>().color = new Color(1, 1, 1, 1);
             CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(4).GetComponent<Text>().text = "Cost : " + nextScytheCost();
         }
         else
         {
-            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetComponent<Image>().color = new Color(1, 0, 0, 200f / 255);
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetComponent<Image>().color = new Color(184f/255, 0, 0, 200f / 255);
+            CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(3).GetChild(0).GetComponent<Image>().color = new Color(200f/255, 0, 0, 200f / 255);
             CharacterMenu.transform.GetChild(0).GetChild(8).GetChild(4).GetComponent<Text>().text = "Unlock an upgrade at level " + nextScytheLevel;
         }
 
         if (level >= 3)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(1).GetChild(2).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(1).GetChild(3).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(3).gameObject.SetActive(false);
         }
         if (level >= 7)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(2).GetChild(2).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(2).GetChild(3).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
         }
         if (level >= 5)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(1).GetChild(2).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(1).GetChild(3).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(1).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(1).GetChild(3).gameObject.SetActive(false);
         }
         if (level >= 10)
         {
-            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(2).GetChild(2).gameObject.SetActive(false);
-            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(2).GetChild(3).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
         }
     }
 
