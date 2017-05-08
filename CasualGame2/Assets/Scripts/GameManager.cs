@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private bool soulIsSelected;
 
     public GameObject soulMenu;
+    public GameObject characterMenu;
 
 	private Vector3 prevMousePosition;
 	public Vector4 limit;
@@ -49,6 +50,8 @@ public class GameManager : MonoBehaviour
         selectedImage.SetActive(false);
 
         rayResults = new List<RaycastResult>();
+
+        characterMenu.GetComponent<CharacterMenu>().Hide();
 
         initialTag = "";
         initialRay = 0;
@@ -89,16 +92,20 @@ public class GameManager : MonoBehaviour
 
             prevMousePosition = Input.mousePosition;
 
-            initialTag = rayResults[0].gameObject.tag;
+            if(rayResults.Count > 0)
+            {
+                initialTag = rayResults[0].gameObject.tag;
+            }
 
             initialRay = rayResults.Count;
         }
 		
 		if(Input.GetMouseButton(0))
         {
-            
+
             if (initialRay == 0 || initialTag == "PlotPoint")
             {
+                Debug.Log("soul is not clicked");
                 soulIsSelected = false;
             }
 
@@ -284,7 +291,15 @@ public class GameManager : MonoBehaviour
 
     public void SetCharacterMenu(bool activation)
     {
-        CharacterMenu.SetActive(activation);
+        if(activation)
+        {
+            characterMenu.GetComponent<CharacterMenu>().Show();
+        }
+        else
+        {
+            characterMenu.GetComponent<CharacterMenu>().Hide();
+            activation = true;
+        }
     }
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things

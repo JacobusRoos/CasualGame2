@@ -82,7 +82,7 @@ public class Soul : MonoBehaviour
     {
         if (timeToRipe <= 0)
         {
-            plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest, true);
+            plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest * plot.GetComponent<Plot>().extraMult, true);
             plot.GetComponent<Plot>().playerManager.ChangeExperience(50);
         }
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
