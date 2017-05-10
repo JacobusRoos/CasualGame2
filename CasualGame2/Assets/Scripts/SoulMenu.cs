@@ -36,7 +36,7 @@ public class SoulMenu : MonoBehaviour {
         quickButtonHidePosition = new Vector2(quickButtonShowPosition.x, quickButtonShowPosition.y - GUITransform.rect.height / 2f);
 
         menuButtonShowPosition = MenuButton.GetComponent<RectTransform>().anchoredPosition;
-        menuButtonHidePosition = new Vector2(menuButtonShowPosition.x, menuButtonShowPosition.y - GUITransform.rect.height / 2f);
+        menuButtonHidePosition = new Vector2(menuButtonShowPosition.x, menuButtonShowPosition.y - GUITransform.rect.width / 2f);
     }
 	
 	// Update is called once per frame
