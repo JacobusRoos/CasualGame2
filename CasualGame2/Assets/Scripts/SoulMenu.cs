@@ -22,6 +22,8 @@ public class SoulMenu : MonoBehaviour {
     private Vector2 menuButtonShowPosition;
     private Vector2 menuButtonHidePosition;
 
+
+
     // Use this for initialization
     void Start () {
         showPosition = this.GetComponent<RectTransform>().anchoredPosition;
@@ -33,8 +35,8 @@ public class SoulMenu : MonoBehaviour {
         quickButtonShowPosition = QuickReapButton.GetComponent<RectTransform>().anchoredPosition;
         quickButtonHidePosition = new Vector2(quickButtonShowPosition.x, quickButtonShowPosition.y - GUITransform.rect.height / 2f);
 
-        //menuButtonShowPosition = MenuButton.GetComponent<RectTransform>().anchoredPosition;
-        //menuButtonHidePosition = new Vector2(menuButtonShowPosition.x, menuButtonShowPosition.y - GUITransform.rect.height / 2f);
+        menuButtonShowPosition = MenuButton.GetComponent<RectTransform>().anchoredPosition;
+        menuButtonHidePosition = new Vector2(menuButtonShowPosition.x, menuButtonShowPosition.y - GUITransform.rect.height / 2f);
     }
 	
 	// Update is called once per frame
@@ -47,7 +49,7 @@ public class SoulMenu : MonoBehaviour {
         this.GetComponent<RectTransform>().anchoredPosition = hidePosition;
         ReapButton.GetComponent<RectTransform>().anchoredPosition = buttonHidePosition;
         QuickReapButton.GetComponent<RectTransform>().anchoredPosition = quickButtonShowPosition;
-        //MenuButton.GetComponent<RectTransform>().anchoredPosition = menuButtonShowPosition;
+        MenuButton.GetComponent<RectTransform>().anchoredPosition = menuButtonShowPosition;
     }
 
     public void Show()
@@ -55,6 +57,6 @@ public class SoulMenu : MonoBehaviour {
         this.GetComponent<RectTransform>().anchoredPosition = showPosition;
         ReapButton.GetComponent<RectTransform>().anchoredPosition = buttonShowPosition;
         QuickReapButton.GetComponent<RectTransform>().anchoredPosition = quickButtonHidePosition;
-        //MenuButton.GetComponent<RectTransform>().anchoredPosition = menuButtonHidePosition;
+        MenuButton.GetComponent<RectTransform>().anchoredPosition = menuButtonHidePosition;
     }
 }
