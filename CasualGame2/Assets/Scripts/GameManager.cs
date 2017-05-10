@@ -204,6 +204,7 @@ public class GameManager : MonoBehaviour
                 Ectoplasm = playerManager.Ectoplasm,
                 Level = playerManager.Level,
                 Experience = playerManager.Experience,
+                ScytheRank = playerManager.scytheRank,
                 Plots = new Dictionary<int, SerializablePlot>()
             };
             foreach(var plotObj in playerManager.Plots)
@@ -244,7 +245,11 @@ public class GameManager : MonoBehaviour
             object rawsave = bf.Deserialize(file);
             SaveData save = (SaveData)rawsave;
             playerManager.ectoplasm = save.Ectoplasm;
-            playerManager.level = save.Level;
+            for(int i = save.Level; i > 1; i--)
+            {
+                playerManager.LevelUp();
+            }
+            playerManager.scytheRank = save.ScytheRank;
             playerManager.experience = save.Experience;
 
             TimeSpan ts = DateTime.UtcNow - save.CreationTimestamp;

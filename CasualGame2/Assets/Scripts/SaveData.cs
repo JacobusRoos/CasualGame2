@@ -11,6 +11,7 @@ public struct SaveData
     public float Ectoplasm { get; set; }
     public int Level { get; set; }
     public int Experience { get; set; }
+    public float ScytheRank { get; set; }
 
     public Dictionary<int, SerializablePlot> Plots { get; set; }
 }
