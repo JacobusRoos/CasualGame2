@@ -92,9 +92,12 @@ public class GameManager : MonoBehaviour
             if(rayResults.Count > 0)
             {
                 initialTag = rayResults[0].gameObject.tag;
+                Debug.Log(initialTag);
             }
 
             initialRay = rayResults.Count;
+
+            
         }
 		
 		if(Input.GetMouseButton(0))
