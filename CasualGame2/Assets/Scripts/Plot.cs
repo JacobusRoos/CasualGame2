@@ -9,6 +9,8 @@ public class Plot : MonoBehaviour
     public float extraMult;
     public PlayerManager playerManager;
     List<GameObject> soulContent = new List<GameObject>();
+	public List<GameObject> bonusType = new List<GameObject>();
+	public List<float> bonusAmount = new List<float>();
 
 	// Use this for initialization
 	void Start ()

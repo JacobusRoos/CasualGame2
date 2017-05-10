@@ -199,7 +199,7 @@ public class PlayerManager : MonoBehaviour
     {
         level++;
         experience = 0;
-        nextLevelExperience = level * 500;
+        nextLevelExperience = (level * 250) + 250;
         if (level % 2 == 0)
         {
             maxPlots += 1;

@@ -81,7 +81,15 @@ public class Soul : MonoBehaviour
     {
         if (timeToRipe <= 0)
         {
-            plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest * plot.GetComponent<Plot>().extraMult, true);
+			float harvestMult = plot.GetComponent<Plot>().extraMult;
+			for(int i = 0; i < plot.GetComponent<Plot>().bonusType.Count; i++)
+			{
+				if(plot.GetComponent<Plot>().bonusType[i].name + "(Clone)" == name)
+				{
+					harvestMult += plot.GetComponent<Plot>().bonusAmount[i] - 1;
+				}
+			}
+            plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest * harvestMult, true);
             plot.GetComponent<Plot>().playerManager.ChangeExperience(50);
         }
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
