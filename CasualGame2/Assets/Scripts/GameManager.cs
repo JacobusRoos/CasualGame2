@@ -19,8 +19,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject soulMenu;
     public GameObject characterMenu;
+    public GameObject plotMenu;
 
-	private Vector3 prevMousePosition;
+    private Vector3 prevMousePosition;
 	public Vector4 limit;
 	
 	public Vector2 distanceTraveled = new Vector2(0, 0);
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
     private int initialRay;
 
     public GameObject CharacterMenu;
+    
 
     // Use this for initialization
     void Start ()
@@ -198,6 +200,17 @@ public class GameManager : MonoBehaviour
             activation = true;
         }
     }
+
+    public void ShowPlotMenu()
+    {
+        plotMenu.GetComponent<PlotMenu>().ShowMenu();
+    }
+
+    public void ChangePlotType(GameObject plot)
+    {
+        plotPrefab = plot;
+    }
+
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
     /// </summary>

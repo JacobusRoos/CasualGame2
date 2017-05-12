@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridPart : MonoBehaviour 
 {
 	public GameManager gameManager;
+    public GameObject plotMenu;
 	
 	// Use this for initialization
 	void Start () 
@@ -22,7 +23,8 @@ public class GridPart : MonoBehaviour
 	{
 		if(transform.childCount == 0)
 		{
-			gameManager.playerManager.AddPlot(gameManager.plotPrefab, gameObject);
+            gameManager.ShowPlotMenu();
+            gameManager.playerManager.DisplayPlotMenu(gameObject);
 		}
 	}
 }

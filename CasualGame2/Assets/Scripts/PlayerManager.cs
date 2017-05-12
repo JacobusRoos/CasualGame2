@@ -26,6 +26,8 @@ public class PlayerManager : MonoBehaviour
 
     private string[] ectoplasmNotation;
 
+    private GameObject selectedPlot;
+
     // Use this for initialization
     void Start ()
     {
@@ -131,11 +133,24 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void AddPlot(GameObject plot, GameObject parent)
+    public void DisplayPlotMenu(GameObject parent)
     {
-        if (!IsFull && CanAfford(plot.GetComponent<Plot>().cost))
+        //display menu
+
+        selectedPlot = parent;
+    }
+
+    public void ChangePlot(GameObject plotType)
+    {
+        gameManager.GetComponent<GameManager>().plotPrefab = plotType;
+        AddPlot();
+    }
+
+    public void AddPlot()
+    {
+        if (!IsFull && CanAfford(gameManager.GetComponent<GameManager>().plotPrefab.GetComponent<Plot>().cost))
         {
-            GameObject newPlot = Instantiate(plot, parent.transform);
+            GameObject newPlot = Instantiate(gameManager.GetComponent<GameManager>().plotPrefab, selectedPlot.transform);
 			newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
             newPlot.GetComponent<Plot>().playerManager = this;
             ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost, false);
@@ -143,6 +158,8 @@ public class PlayerManager : MonoBehaviour
             plotList.Add(newPlot);
         }
     }
+
+
 
     public bool IsFull
     {
