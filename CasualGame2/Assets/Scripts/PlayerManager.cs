@@ -24,6 +24,8 @@ public class PlayerManager : MonoBehaviour
     public GameObject PlayerInfoUI;
     public GameObject CharacterMenu;
 
+    public GameObject selectedPlot;
+
     private string[] ectoplasmNotation;
 
     // Use this for initialization
@@ -83,6 +85,17 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateUI()
     {
+        if(selectedPlot != null)
+        {
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(true);
+            GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(false);
+        }
+        else
+        {
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(false);
+        }
+
         PlayerInfoUI.transform.GetChild(0).GetComponent<Text>().text = "Level " + level;
         PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = GenerateEctoplasmString() + " Ecto";
         PlayerInfoUI.transform.GetChild(2).GetComponent<Slider>().value = experience;
@@ -223,6 +236,11 @@ public class PlayerManager : MonoBehaviour
             maxScytheRank += .1f;
             nextScytheLevel += 3;
         }
+    }
+
+    public void ChangeSoul(int id)
+    {
+        selectedPlot.GetComponent<Plot>().AddToPlot(availableSouls[id]);
     }
 
     private string GenerateEctoplasmString()

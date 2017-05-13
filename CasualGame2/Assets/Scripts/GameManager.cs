@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     private GameObject selectedSoul;
     public GameObject selectedImage;
-    private bool soulIsSelected;
+    public bool soulIsSelected;
 
     public GameObject soulMenu;
     public GameObject characterMenu;
@@ -74,10 +74,10 @@ public class GameManager : MonoBehaviour
 
         if(soulIsSelected)
         {
-            soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+            soulMenu.transform.GetChild(1).GetComponent<Slider>().value = selectedSoul.GetComponent<Soul>().lifespan;
+            soulMenu.transform.GetChild(1).GetComponent<Slider>().transform.GetChild(1).GetChild(0).GetComponent<Image>().color = new Color(1-(selectedSoul.GetComponent<Soul>().lifespan / selectedSoul.GetComponent<Soul>().MaxLifespan), selectedSoul.GetComponent<Soul>().lifespan/ selectedSoul.GetComponent<Soul>().MaxLifespan, 0, 1);
+            soulMenu.transform.GetChild(2).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString() + "s left alive";
         }
-
-        
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -102,11 +102,21 @@ public class GameManager : MonoBehaviour
 		
 		if(Input.GetMouseButton(0))
         {
-
-            if (initialRay == 0 || initialTag == "PlotPoint")
+            //click on nothing
+            if (initialRay == 0)
             {
-                Debug.Log("soul is not clicked");
                 soulIsSelected = false;
+                playerManager.selectedPlot = null;
+                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+            }
+            //click on ground
+            else if(initialTag == "PlotPoint")
+            {
+                soulIsSelected = false;
+                playerManager.selectedPlot = null;
+                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
             }
 
             if (canMove)
@@ -138,6 +148,8 @@ public class GameManager : MonoBehaviour
 
     public void SelectSoul(GameObject Soul)
     {
+        playerManager.selectedPlot = null;
+
         RectTransform GUIRect = GUICanvas.GetComponent<RectTransform>();
 
         Vector2 viewPosition = mainCamera.WorldToViewportPoint(Soul.transform.position);
@@ -166,11 +178,14 @@ public class GameManager : MonoBehaviour
     {
         soulMenu.GetComponent<SoulMenu>().Show();
 
-        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
+        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString() + " Ecto per second";
 
-        soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+        soulMenu.transform.GetChild(1).GetComponent<Slider>().maxValue = selectedSoul.GetComponent<Soul>().MaxLifespan;
+        soulMenu.transform.GetChild(1).GetComponent<Slider>().value = selectedSoul.GetComponent<Soul>().lifespan;
 
-        soulMenu.transform.GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
+        soulMenu.transform.GetChild(2).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString() + "s left alive";
+
+        soulMenu.transform.GetChild(3).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString() + " Ecto on Harvest";
     }
 
     public void ToggleQuickHarvest()
