@@ -126,11 +126,19 @@ public class PlayerManager : MonoBehaviour
         {
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(0).GetChild(0).GetChild(0).FindChild("College Soul").FindChild("Cover").gameObject.SetActive(false);
         }
         if (level >= 7)
         {
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(0).GetChild(0).GetChild(0).FindChild("Construct Soul").FindChild("Cover").gameObject.SetActive(false);
+        }
+        if (level >= 11)
+        {
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(3).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(3).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(0).GetChild(0).GetChild(0).FindChild("Astro Soul").FindChild("Cover").gameObject.SetActive(false);
         }
         if (level >= 5)
         {
@@ -240,7 +248,10 @@ public class PlayerManager : MonoBehaviour
 
     public void ChangeSoul(int id)
     {
-        selectedPlot.GetComponent<Plot>().AddToPlot(availableSouls[id]);
+        if (id < availableSouls.Count)
+        {
+            selectedPlot.GetComponent<Plot>().AddToPlot(availableSouls[id]);
+        }
     }
 
     private string GenerateEctoplasmString()

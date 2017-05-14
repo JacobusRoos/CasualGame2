@@ -98,6 +98,7 @@ public class Soul : MonoBehaviour
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
         GameObject fade = Instantiate(soulFade, transform.position, transform.rotation);
         fade.GetComponent<SpriteRenderer>().color = transform.GetComponent<Image>().color;
+        fade.GetComponent<SpriteRenderer>().sprite = transform.GetComponent<Image>().sprite;
         Destroy(gameObject);
     }
 

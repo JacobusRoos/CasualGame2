@@ -121,17 +121,35 @@ public class GameManager : MonoBehaviour
 
             if (canMove)
 			{
-				if(distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) < 30 && distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) > -30)
+                /*if(distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) < 30 && distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) > -30)
 				{
-					Camera.main.transform.Translate((.25f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-					distanceTraveled.x += .25f * (prevMousePosition.x - Input.mousePosition.x);
+					Camera.main.transform.Translate((.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.x += .15f * (prevMousePosition.x - Input.mousePosition.x);
 				}
 				if(distanceTraveled.y + (.25f * (prevMousePosition.y - Input.mousePosition.y)) < 30 && distanceTraveled.y + (.25f * (prevMousePosition.y - Input.mousePosition.y)) > -30)
 				{
-					Camera.main.transform.Translate(-(.25f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-					distanceTraveled.y += .25f * (prevMousePosition.y - Input.mousePosition.y);
-				}
-			}
+					Camera.main.transform.Translate(-(.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.y += .15f * (prevMousePosition.y - Input.mousePosition.y);
+                }*/
+                Camera.main.transform.Translate((.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+                Camera.main.transform.Translate(-(.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+                if (Camera.main.transform.position.x > 60)
+                {
+                    Camera.main.transform.position = new Vector3(60, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                }
+                if (Camera.main.transform.position.x < 0)
+                {
+                    Camera.main.transform.position = new Vector3(0, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                }
+                if (Camera.main.transform.position.z > 0)
+                {
+                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+                }
+                if (Camera.main.transform.position.z < -60)
+                {
+                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -60);
+                }
+            }
             //combines the previous 2 lines into 1
             //Camera.main.transform.Translate((.5f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
 			if(canMove || Vector2.Distance(Input.mousePosition, prevMousePosition) > 10 && (initialRay == 0 || initialTag == "PlotPoint"))
@@ -172,6 +190,9 @@ public class GameManager : MonoBehaviour
         selectedSoul.GetComponent<Soul>().Harvest();
 
         selectedSoul = null;
+
+        GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+        GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
     }
 
     private void DisplaySelectedSoulInfo()

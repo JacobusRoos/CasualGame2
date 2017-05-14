@@ -5,6 +5,7 @@ using UnityEngine;
 public class GridPart : MonoBehaviour 
 {
 	public GameManager gameManager;
+    public bool canPlace;
 	
 	// Use this for initialization
 	void Start () 
@@ -20,9 +21,12 @@ public class GridPart : MonoBehaviour
 	
 	public void PlacePlot()
 	{
-		if(transform.childCount == 0)
-		{
-			gameManager.playerManager.AddPlot(gameManager.plotPrefab, gameObject);
-		}
+        if (canPlace)
+        {
+            if (transform.childCount == 0)
+            {
+                gameManager.playerManager.AddPlot(gameManager.plotPrefab, gameObject);
+            }
+        }
 	}
 }
