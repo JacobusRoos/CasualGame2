@@ -25,6 +25,8 @@ public class PlayerManager : MonoBehaviour
     public GameObject PlayerInfoUI;
     public GameObject CharacterMenu;
 
+    public GameObject selectedPlot;
+
     private string[] ectoplasmNotation;
 
     // Use this for initialization
@@ -90,6 +92,17 @@ public class PlayerManager : MonoBehaviour
 
     public void UpdateUI()
     {
+        if(selectedPlot != null)
+        {
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(true);
+            GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(false);
+        }
+        else
+        {
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(false);
+        }
+
         PlayerInfoUI.transform.GetChild(0).GetComponent<Text>().text = "Level " + level;
         PlayerInfoUI.transform.GetChild(1).GetComponent<Text>().text = GenerateEctoplasmString() + " Ecto";
         PlayerInfoUI.transform.GetChild(2).GetComponent<Slider>().value = experience;
@@ -120,36 +133,68 @@ public class PlayerManager : MonoBehaviour
         {
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("College Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("College Soul").GetComponent<Button>().interactable = true;
         }
         if (level >= 7)
         {
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Construct Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Construct Soul").GetComponent<Button>().interactable = true;
+        }
+        if (level >= 11)
+        {
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(3).GetChild(2).gameObject.SetActive(false);
+            CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(3).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Astro Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Astro Soul").GetComponent<Button>().interactable = true;
         }
         if (level >= 5)
         {
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(1).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(1).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("City Plot").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("City Plot").GetComponent<Button>().interactable = true;
         }
         if (level >= 10)
         {
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Moon Plot").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Moon Plot").GetComponent<Button>().interactable = true;
         }
     }
-
-    public void AddPlot(GameObject plot, GameObject parent)
+    public void AddPlot(GameObject plot)
     {
+        GameObject parent = gameManager.selectedGrid;
         if (!IsFull && CanAfford(plot.GetComponent<Plot>().cost))
         {
             GameObject newPlot = Instantiate(plot, parent.transform);
+            newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
+            newPlot.GetComponent<Plot>().playerManager = this;
+            ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost, false);
+            ChangeExperience(150);
+            plotList.Add(newPlot);
+
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
+        }
+    }
+    public void AddPlot(GameObject plot, GameObject parent)
+    {
+        if (!IsFull && CanAfford(gameManager.GetComponent<GameManager>().plotPrefab.GetComponent<Plot>().cost))
+        {
+            GameObject newPlot = Instantiate(gameManager.GetComponent<GameManager>().plotPrefab, parent.transform);
 			newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
             newPlot.GetComponent<Plot>().playerManager = this;
             ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost, false);
             ChangeExperience(150);
             plotList.Add(newPlot);
+
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
         }
     }
+
 
     public GameObject AddPlotDirect(GameObject plot, int parentId)
     {
@@ -160,7 +205,7 @@ public class PlayerManager : MonoBehaviour
         plotList.Add(newPlot);
         return newPlot;
     }
-
+	
     public bool IsFull
     {
         get
@@ -221,7 +266,7 @@ public class PlayerManager : MonoBehaviour
     {
         level++;
         experience = 0;
-        nextLevelExperience = level * 500;
+        nextLevelExperience = (level * 250) + 250;
         if (level % 2 == 0)
         {
             maxPlots += 1;
@@ -244,6 +289,14 @@ public class PlayerManager : MonoBehaviour
         {
             maxScytheRank += .1f;
             nextScytheLevel += 3;
+        }
+    }
+
+    public void ChangeSoul(int id)
+    {
+        if (id < availableSouls.Count)
+        {
+            selectedPlot.GetComponent<Plot>().AddToPlot(availableSouls[id]);
         }
     }
 

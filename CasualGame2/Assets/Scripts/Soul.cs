@@ -10,6 +10,7 @@ public class Soul : MonoBehaviour
     public float ectoPerSecond;
     public float ectoPerHarvest;
     public float lifespan;
+    private float maxLifespan;
     public float timeToRipe;
     public GameObject plot;
     public Color baseColor;
@@ -24,6 +25,8 @@ public class Soul : MonoBehaviour
         baseColor = transform.GetComponent<Image>().color;
         //transform.parent = null;
         transform.rotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+
+        maxLifespan = lifespan;
         //transform.parent = plot.transform;
 
         //ectoPerSecond = 2;
@@ -82,12 +85,29 @@ public class Soul : MonoBehaviour
     {
         if (timeToRipe <= 0)
         {
-            plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest * plot.GetComponent<Plot>().extraMult, true);
+			float harvestMult = plot.GetComponent<Plot>().extraMult;
+			for(int i = 0; i < plot.GetComponent<Plot>().bonusType.Count; i++)
+			{
+				if(plot.GetComponent<Plot>().bonusType[i].name + "(Clone)" == name)
+				{
+					harvestMult += plot.GetComponent<Plot>().bonusAmount[i] - 1;
+				}
+			}
+            plot.GetComponent<Plot>().playerManager.ChangeEctoplasm(ectoPerHarvest * harvestMult, true);
             plot.GetComponent<Plot>().playerManager.ChangeExperience(50);
         }
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
         GameObject fade = Instantiate(soulFade, transform.position, transform.rotation);
         fade.GetComponent<SpriteRenderer>().color = transform.GetComponent<Image>().color;
+        fade.GetComponent<SpriteRenderer>().sprite = transform.GetComponent<Image>().sprite;
         Destroy(gameObject);
+    }
+
+    public float MaxLifespan
+    {
+        get
+        {
+            return maxLifespan;
+        }
     }
 }

@@ -10,16 +10,32 @@ public class Plot : MonoBehaviour
     public float extraMult;
     public PlayerManager playerManager;
     List<GameObject> soulContent = new List<GameObject>();
+	public List<GameObject> bonusType = new List<GameObject>();
+	public List<float> bonusAmount = new List<float>();
 
 	// Use this for initialization
 	void Start ()
     {
         soulContent = new List<GameObject>();
 	}
-	
-	public void OnClick()
-	{
-		AddToPlot(playerManager.gameManager.soulPrefab);
+
+    public void OnClick()
+    {
+        if (!playerManager.gameManager.QuickHarvest)
+        {
+            playerManager.gameManager.soulIsSelected = false;
+            //AddToPlot(playerManager.gameManager.soulPrefab);
+            if (GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.activeSelf && playerManager.selectedPlot == gameObject)
+            {
+                playerManager.selectedPlot = null;
+                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+            }
+            else
+            {
+                playerManager.selectedPlot = gameObject;
+            }
+        }
 	}
 	
 	// Update is called once per frame

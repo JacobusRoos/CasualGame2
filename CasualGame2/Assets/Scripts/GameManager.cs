@@ -17,12 +17,15 @@ public class GameManager : MonoBehaviour
 
     private GameObject selectedSoul;
     public GameObject selectedImage;
-    private bool soulIsSelected;
+    
+    public bool plotIsSelected;
+
+    public bool soulIsSelected;
 
     public GameObject soulMenu;
     public GameObject characterMenu;
 
-	private Vector3 prevMousePosition;
+    private Vector3 prevMousePosition;
 	public Vector4 limit;
 	
 	public Vector2 distanceTraveled = new Vector2(0, 0);
@@ -41,12 +44,15 @@ public class GameManager : MonoBehaviour
 
     public GameObject CharacterMenu;
 
+    public GameObject selectedGrid;
+
     // Use this for initialization
     void Start ()
     {
         selectedSoul = null;
         soulIsSelected = false;
-        LoadSave();
+        //LoadSave();
+        plotIsSelected = false;
         selectedImage.SetActive(false);
 
         rayResults = new List<RaycastResult>();
@@ -64,7 +70,7 @@ public class GameManager : MonoBehaviour
     {
         //Debug.Log(selectedSoul);
 
-        if (selectedSoul == null || !soulIsSelected)
+        if ((selectedSoul == null || !soulIsSelected) && !plotIsSelected)
         {
             soulMenu.GetComponent<SoulMenu>().Hide();
 
@@ -77,10 +83,10 @@ public class GameManager : MonoBehaviour
 
         if(soulIsSelected)
         {
-            soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+            soulMenu.transform.GetChild(1).GetComponent<Slider>().value = selectedSoul.GetComponent<Soul>().lifespan;
+            soulMenu.transform.GetChild(1).GetComponent<Slider>().transform.GetChild(1).GetChild(0).GetComponent<Image>().color = new Color(1-(selectedSoul.GetComponent<Soul>().lifespan / selectedSoul.GetComponent<Soul>().MaxLifespan), selectedSoul.GetComponent<Soul>().lifespan/ selectedSoul.GetComponent<Soul>().MaxLifespan, 0, 1);
+            soulMenu.transform.GetChild(2).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString() + "s left alive";
         }
-
-        
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -95,33 +101,69 @@ public class GameManager : MonoBehaviour
             if(rayResults.Count > 0)
             {
                 initialTag = rayResults[0].gameObject.tag;
+                Debug.Log(initialTag);
             }
 
             initialRay = rayResults.Count;
         }
-		
+
+
 		if(Input.GetMouseButton(0))
         {
-
-            if (initialRay == 0 || initialTag == "PlotPoint")
+            //click on nothing
+            if (initialRay == 0)
             {
-                Debug.Log("soul is not clicked");
                 soulIsSelected = false;
+                playerManager.selectedPlot = null;
+                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+            }
+            //click on ground
+            else if(initialTag == "PlotPoint")
+            {
+                //Debug.Log("soul is not clicked");
+                soulIsSelected = false;
+                playerManager.selectedPlot = null;
+                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+            }
+
+            if(initialRay == 0 || initialTag == "Soul")
+            {
+                plotIsSelected = false;
             }
 
             if (canMove)
 			{
-				if(distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) < 30 && distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) > -30)
+                /*if(distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) < 30 && distanceTraveled.x + (.25f * (prevMousePosition.x - Input.mousePosition.x)) > -30)
 				{
-					Camera.main.transform.Translate((.25f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-					distanceTraveled.x += .25f * (prevMousePosition.x - Input.mousePosition.x);
+					Camera.main.transform.Translate((.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.x += .15f * (prevMousePosition.x - Input.mousePosition.x);
 				}
 				if(distanceTraveled.y + (.25f * (prevMousePosition.y - Input.mousePosition.y)) < 30 && distanceTraveled.y + (.25f * (prevMousePosition.y - Input.mousePosition.y)) > -30)
 				{
-					Camera.main.transform.Translate(-(.25f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.25f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
-					distanceTraveled.y += .25f * (prevMousePosition.y - Input.mousePosition.y);
-				}
-			}
+					Camera.main.transform.Translate(-(.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+					distanceTraveled.y += .15f * (prevMousePosition.y - Input.mousePosition.y);
+                }*/
+                Camera.main.transform.Translate((.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+                Camera.main.transform.Translate(-(.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), 0, (.15f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * -Camera.main.transform.eulerAngles.y)), Space.World);
+                if (Camera.main.transform.position.x > 60)
+                {
+                    Camera.main.transform.position = new Vector3(60, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                }
+                if (Camera.main.transform.position.x < 0)
+                {
+                    Camera.main.transform.position = new Vector3(0, Camera.main.transform.position.y, Camera.main.transform.position.z);
+                }
+                if (Camera.main.transform.position.z > 0)
+                {
+                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, 0);
+                }
+                if (Camera.main.transform.position.z < -60)
+                {
+                    Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, -60);
+                }
+            }
             //combines the previous 2 lines into 1
             //Camera.main.transform.Translate((.5f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Cos(Mathf.Deg2Rad * 40)) - (.5f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Sin(Mathf.Deg2Rad * 40)), 0, (.5f * (prevMousePosition.y - Input.mousePosition.y) * Mathf.Cos(Mathf.Deg2Rad * 40)) + (.5f * (prevMousePosition.x - Input.mousePosition.x) * Mathf.Sin(Mathf.Deg2Rad * 40)), Space.World);
 			if(canMove || Vector2.Distance(Input.mousePosition, prevMousePosition) > 10 && (initialRay == 0 || initialTag == "PlotPoint"))
@@ -136,8 +178,22 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+    public void CloseSoulSelect()
+    {
+        playerManager.selectedPlot = null;
+        //GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(false);
+        GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+        GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+    }
+    public void ClosePlotSelect()
+    {
+        GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
+    }
+
     public void SelectSoul(GameObject Soul)
     {
+        playerManager.selectedPlot = null;
+
         RectTransform GUIRect = GUICanvas.GetComponent<RectTransform>();
 
         Vector2 viewPosition = mainCamera.WorldToViewportPoint(Soul.transform.position);
@@ -160,17 +216,23 @@ public class GameManager : MonoBehaviour
         selectedSoul.GetComponent<Soul>().Harvest();
 
         selectedSoul = null;
+
+        GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+        GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
     }
 
     private void DisplaySelectedSoulInfo()
     {
         soulMenu.GetComponent<SoulMenu>().Show();
 
-        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString();
+        soulMenu.transform.GetChild(0).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerSecond.ToString() + " Ecto per second";
 
-        soulMenu.transform.GetChild(1).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString();
+        soulMenu.transform.GetChild(1).GetComponent<Slider>().maxValue = selectedSoul.GetComponent<Soul>().MaxLifespan;
+        soulMenu.transform.GetChild(1).GetComponent<Slider>().value = selectedSoul.GetComponent<Soul>().lifespan;
 
-        soulMenu.transform.GetChild(2).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString();
+        soulMenu.transform.GetChild(2).GetComponent<Text>().text = ((int)selectedSoul.GetComponent<Soul>().lifespan).ToString() + "s left alive";
+
+        soulMenu.transform.GetChild(3).GetComponent<Text>().text = selectedSoul.GetComponent<Soul>().ectoPerHarvest.ToString() + " Ecto on Harvest";
     }
 
     public void ToggleQuickHarvest()
@@ -306,6 +368,7 @@ public class GameManager : MonoBehaviour
             activation = true;
         }
     }
+
     /// <summary>
     /// Need an easy way to exit the game to avoid Android doing stupid things
     /// </summary>
