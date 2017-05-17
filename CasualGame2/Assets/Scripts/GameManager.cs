@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     private int initialRay;
 
     public GameObject CharacterMenu;
+    public GameObject selectedGrid;
 
     // Use this for initialization
     void Start ()
@@ -163,6 +164,18 @@ public class GameManager : MonoBehaviour
 			canMove = false;
 		}
 	}
+
+    public void CloseSoulSelect()
+    {
+        playerManager.selectedPlot = null;
+        //GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(false);
+        GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+        GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+    }
+    public void ClosePlotSelect()
+    {
+        GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
+    }
 
     public void SelectSoul(GameObject Soul)
     {

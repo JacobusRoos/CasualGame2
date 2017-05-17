@@ -152,6 +152,21 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void AddPlot(GameObject plot)
+    {
+        GameObject parent = gameManager.selectedGrid;
+        if (!IsFull && CanAfford(plot.GetComponent<Plot>().cost))
+        {
+            GameObject newPlot = Instantiate(plot, parent.transform);
+            newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
+            newPlot.GetComponent<Plot>().playerManager = this;
+            ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost, false);
+            ChangeExperience(150);
+            plotList.Add(newPlot);
+
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
+        }
+    }
     public void AddPlot(GameObject plot, GameObject parent)
     {
         if (!IsFull && CanAfford(plot.GetComponent<Plot>().cost))
@@ -162,6 +177,8 @@ public class PlayerManager : MonoBehaviour
             ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost, false);
             ChangeExperience(150);
             plotList.Add(newPlot);
+
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
         }
     }
 

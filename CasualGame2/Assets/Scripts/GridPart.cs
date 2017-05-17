@@ -23,10 +23,12 @@ public class GridPart : MonoBehaviour
 	{
         if (canPlace)
         {
-            if (transform.childCount == 0)
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(true);
+            gameManager.selectedGrid = gameObject;
+            /*if (transform.childCount == 0)
             {
                 gameManager.playerManager.AddPlot(gameManager.plotPrefab, gameObject);
-            }
+            }*/
         }
 	}
 }
