@@ -17,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     List<GameObject> plotList = new List<GameObject>();
     public List<GameObject> startingStuff = new List<GameObject>();
     public List<int> levelUnlocks = new List<int>();
+    Dictionary<int, GridPart> idToGrid = new Dictionary<int, GridPart>();
     public List<GameObject> levelObjects = new List<GameObject>();
     public List<GameObject> availablePlots = new List<GameObject>();
     public List<GameObject> availableSouls = new List<GameObject>();
@@ -43,6 +44,12 @@ public class PlayerManager : MonoBehaviour
         gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
         ectoplasmNotation = new string[]{ "K", "M", "B", "T", "Qa", "Qi"};
+
+        var grid = GameObject.FindGameObjectWithTag("Grid");
+        foreach(var cell in grid.GetComponentsInChildren<GridPart>())
+        {
+            idToGrid.Add(cell.GetInstanceID(), cell);
+        }
 	}
 	
 	// Update is called once per frame
@@ -189,7 +196,16 @@ public class PlayerManager : MonoBehaviour
     }
 
 
-
+    public GameObject AddPlotDirect(GameObject plot, int parentId)
+    {
+        GridPart parent = idToGrid[parentId];
+        GameObject newPlot = Instantiate(plot, parent.transform);
+        newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
+        newPlot.GetComponent<Plot>().playerManager = this;
+        plotList.Add(newPlot);
+        return newPlot;
+    }
+	
     public bool IsFull
     {
         get
@@ -223,6 +239,11 @@ public class PlayerManager : MonoBehaviour
         {
             return level;
         }
+    }
+
+    public List<GameObject> Plots
+    {
+        get { return plotList; }
     }
 
     //use these to change public variables

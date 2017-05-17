@@ -1,5 +1,7 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -44,11 +46,15 @@ public class GameManager : MonoBehaviour
 
     public GameObject selectedGrid;
 
+    public List<GameObject> allSouls;
+    public List<GameObject> allPlots;
+
     // Use this for initialization
     void Start ()
     {
         selectedSoul = null;
         soulIsSelected = false;
+        LoadSave();
         plotIsSelected = false;
         selectedImage.SetActive(false);
 
@@ -235,6 +241,141 @@ public class GameManager : MonoBehaviour
     public void ToggleQuickHarvest()
 	{
 		quickHarvest = !quickHarvest;
+	}
+    
+    void OnApplicationFocus(bool gainedFocus)
+    {
+        if (!gainedFocus) SaveGame();
+    }
+	
+    void OnApplicationPause(bool pausing)
+    {
+        if (pausing) SaveGame();
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveGame();
+    }
+
+    public void SaveGame()
+    {
+        try
+        {
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            FileStream file = File.Create(Path.Combine(Application.persistentDataPath, "newsave3.sav"));
+            SaveData save = new SaveData() {
+                CreationTimestamp = System.DateTime.UtcNow,
+                Ectoplasm = playerManager.Ectoplasm,
+                Level = playerManager.Level,
+                Experience = playerManager.Experience,
+                ScytheRank = playerManager.scytheRank,
+                Plots = new Dictionary<int, SerializablePlot>()
+            };
+            foreach(var plotObj in playerManager.Plots)
+            {
+                var plot = plotObj.GetComponent<Plot>();
+                SerializablePlot splot = new SerializablePlot() { Souls = new SerializableSoul[plot.SoulContent.Count] };
+                switch(plot.cost)
+                {
+                    case 35:
+                        splot.Type = SerializablePlot.PlotType.Base;
+                        break;
+                    case 125:
+                        splot.Type = SerializablePlot.PlotType.City;
+                        break;
+                    case 300:
+                        splot.Type = SerializablePlot.PlotType.Moon;
+                        break;
+                }
+                for(int i = 0; i < plot.SoulContent.Count; i++)
+                {
+                    var soul = plot.SoulContent[i].GetComponent<Soul>();
+                    SerializableSoul ssoul = new SerializableSoul() {
+                        EctoPerHarvest = soul.ectoPerHarvest,
+                        EctoPerSecond = soul.ectoPerSecond,
+                        Lifespan = soul.lifespan,
+                        TimeToRipe = soul.timeToRipe,
+                        BaseColor = soul.baseColor,
+                        MatureColor = soul.matureColor
+                    };
+                    switch(soul.cost)
+                    {
+                        case 10:
+                            ssoul.Type = SerializableSoul.SoulType.Base;
+                            break;
+                        case 25:
+                            ssoul.Type = SerializableSoul.SoulType.College;
+                            break;
+                        case 50:
+                            ssoul.Type = SerializableSoul.SoulType.Construction;
+                            break;
+                        case 100:
+                            ssoul.Type = SerializableSoul.SoulType.Astronaut;
+                            break;
+                    }
+                    splot.Souls[i] = ssoul;
+                }
+                var parentGrid = plotObj.GetComponentInParent<GridPart>();
+                save.Plots.Add(parentGrid.GetInstanceID(), splot);
+            }
+            bf.Serialize(file, save);
+            file.Close();
+        }
+        catch (IOException ex)
+        {
+            Debug.Log("There was an error thrown by the OS when trying to save! Exception: " + ex.Message);
+        }
+    }
+
+    private void LoadSave()
+    {
+        try
+        {
+            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            FileStream file = File.OpenRead(Path.Combine(Application.persistentDataPath, "newsave3.sav"));
+            object rawsave = bf.Deserialize(file);
+            SaveData save = (SaveData)rawsave;
+            playerManager.ectoplasm = save.Ectoplasm;
+            for(int i = save.Level; i > 1; i--)
+            {
+                playerManager.LevelUp();
+            }
+            playerManager.scytheRank = save.ScytheRank;
+            playerManager.experience = save.Experience;
+
+            TimeSpan ts = DateTime.UtcNow - save.CreationTimestamp;
+            float deltaTime = (float)ts.TotalSeconds;
+
+            foreach(var plot in save.Plots)
+            {
+                GameObject instantiated = playerManager.AddPlotDirect(allPlots[(int)plot.Value.Type], plot.Key);
+                Plot newPlot = instantiated.GetComponent<Plot>();
+                foreach(var savedSoul in plot.Value.Souls)
+                {
+                    GameObject instantiatedSoul = newPlot.AddToPlotDirect(allSouls[(int)savedSoul.Type]);
+                    Soul newSoul = instantiatedSoul.GetComponent<Soul>();
+                    newSoul.ectoPerHarvest = savedSoul.EctoPerHarvest;
+                    newSoul.ectoPerSecond = savedSoul.EctoPerSecond;
+                    newSoul.lifespan = savedSoul.Lifespan - deltaTime;
+                    newSoul.timeToRipe = savedSoul.TimeToRipe - deltaTime;
+                    newSoul.baseColor = savedSoul.BaseColor;
+                    newSoul.transform.GetComponent<Image>().color = savedSoul.BaseColor;
+                    newSoul.matureColor = savedSoul.MatureColor;
+                    if (newSoul.lifespan < 0) playerManager.ectoplasm += savedSoul.Lifespan * newSoul.ectoPerSecond;
+                    else playerManager.ectoplasm += deltaTime * newSoul.ectoPerSecond;
+                }
+            }
+            file.Close();
+        }
+        catch(FileNotFoundException)
+        {
+            Debug.Log("No save file found, ignoring.");
+        }
+        catch (IOException ex)
+        {
+            Debug.Log("There was an error thrown by the OS when trying to load the save file! Exception: " + ex.Message);
+        }
 	}
 
     public bool QuickHarvest

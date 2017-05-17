@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[System.Serializable]
 public class Soul : MonoBehaviour
 {
     public int cost;
@@ -12,7 +13,7 @@ public class Soul : MonoBehaviour
     private float maxLifespan;
     public float timeToRipe;
     public GameObject plot;
-    Color baseColor;
+    public Color baseColor;
     public Color matureColor;
 	bool animateDeath = false;
 
