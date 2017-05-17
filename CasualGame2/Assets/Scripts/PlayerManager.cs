@@ -28,8 +28,6 @@ public class PlayerManager : MonoBehaviour
 
     private string[] ectoplasmNotation;
 
-    private GameObject selectedPlot;
-
     // Use this for initialization
     void Start ()
     {
@@ -153,17 +151,6 @@ public class PlayerManager : MonoBehaviour
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
         }
     }
-
-<<<<<<< HEAD
-    public void DisplayPlotMenu(GameObject parent)
-    {
-        //display menu
-
-        selectedPlot = parent;
-    }
-
-    public void ChangePlot(GameObject plotType)
-=======
     public void AddPlot(GameObject plot)
     {
         GameObject parent = gameManager.selectedGrid;
@@ -180,18 +167,10 @@ public class PlayerManager : MonoBehaviour
         }
     }
     public void AddPlot(GameObject plot, GameObject parent)
->>>>>>> refs/remotes/origin/SoulSelect
-    {
-        gameManager.GetComponent<GameManager>().plotPrefab = plotType;
-        AddPlot();
-        gameManager.GetComponent<GameManager>().plotMenu.GetComponent<PlotMenu>().HideMenu();
-    }
-
-    public void AddPlot()
     {
         if (!IsFull && CanAfford(gameManager.GetComponent<GameManager>().plotPrefab.GetComponent<Plot>().cost))
         {
-            GameObject newPlot = Instantiate(gameManager.GetComponent<GameManager>().plotPrefab, selectedPlot.transform);
+            GameObject newPlot = Instantiate(gameManager.GetComponent<GameManager>().plotPrefab, parent.transform);
 			newPlot.transform.localPosition = new Vector3(-.04f, .15f, 0);
             newPlot.GetComponent<Plot>().playerManager = this;
             ChangeEctoplasm(-newPlot.GetComponent<Plot>().cost, false);

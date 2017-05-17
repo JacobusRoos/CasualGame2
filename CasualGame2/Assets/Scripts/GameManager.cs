@@ -15,12 +15,10 @@ public class GameManager : MonoBehaviour
 
     private GameObject selectedSoul;
     public GameObject selectedImage;
-<<<<<<< HEAD
-    private bool soulIsSelected;
+    
     public bool plotIsSelected;
-=======
+
     public bool soulIsSelected;
->>>>>>> refs/remotes/origin/SoulSelect
 
     public GameObject soulMenu;
     public GameObject characterMenu;
@@ -44,11 +42,8 @@ public class GameManager : MonoBehaviour
     private int initialRay;
 
     public GameObject CharacterMenu;
-<<<<<<< HEAD
-    
-=======
+
     public GameObject selectedGrid;
->>>>>>> refs/remotes/origin/SoulSelect
 
     // Use this for initialization
     void Start ()
@@ -124,10 +119,7 @@ public class GameManager : MonoBehaviour
             //click on ground
             else if(initialTag == "PlotPoint")
             {
-<<<<<<< HEAD
                 //Debug.Log("soul is not clicked");
-=======
->>>>>>> refs/remotes/origin/SoulSelect
                 soulIsSelected = false;
                 playerManager.selectedPlot = null;
                 GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
