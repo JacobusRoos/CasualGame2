@@ -144,6 +144,7 @@ public class PlayerManager : MonoBehaviour
     {
         gameManager.GetComponent<GameManager>().plotPrefab = plotType;
         AddPlot();
+        gameManager.GetComponent<GameManager>().plotMenu.GetComponent<PlotMenu>().HideMenu();
     }
 
     public void AddPlot()

@@ -23,6 +23,7 @@ public class GridPart : MonoBehaviour
 	{
 		if(transform.childCount == 0)
 		{
+            gameManager.plotIsSelected = true;
             gameManager.ShowPlotMenu();
             gameManager.playerManager.DisplayPlotMenu(gameObject);
 		}

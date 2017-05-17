@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     private GameObject selectedSoul;
     public GameObject selectedImage;
     private bool soulIsSelected;
+    public bool plotIsSelected;
 
     public GameObject soulMenu;
     public GameObject characterMenu;
@@ -46,6 +47,7 @@ public class GameManager : MonoBehaviour
     {
         selectedSoul = null;
         soulIsSelected = false;
+        plotIsSelected = false;
         selectedImage.SetActive(false);
 
         rayResults = new List<RaycastResult>();
@@ -63,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         //Debug.Log(selectedSoul);
 
-        if (selectedSoul == null || !soulIsSelected)
+        if ((selectedSoul == null || !soulIsSelected) && !plotIsSelected)
         {
             soulMenu.GetComponent<SoulMenu>().Hide();
 
@@ -98,17 +100,23 @@ public class GameManager : MonoBehaviour
             }
 
             initialRay = rayResults.Count;
-
-            
         }
-		
+
+
 		if(Input.GetMouseButton(0))
         {
 
             if (initialRay == 0 || initialTag == "PlotPoint")
             {
-                Debug.Log("soul is not clicked");
+                //Debug.Log("soul is not clicked");
                 soulIsSelected = false;
+            }
+
+            if(initialRay == 0 || initialTag == "Soul")
+            {
+                plotIsSelected = false;
+
+                plotMenu.GetComponent<PlotMenu>().HideMenu();
             }
 
             if (canMove)
