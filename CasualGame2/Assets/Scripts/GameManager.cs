@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject soulMenu;
     public GameObject characterMenu;
-    public GameObject plotMenu;
 
     private Vector3 prevMousePosition;
 	public Vector4 limit;
@@ -129,8 +128,6 @@ public class GameManager : MonoBehaviour
             if(initialRay == 0 || initialTag == "Soul")
             {
                 plotIsSelected = false;
-
-                plotMenu.GetComponent<PlotMenu>().HideMenu();
             }
 
             if (canMove)
@@ -259,16 +256,6 @@ public class GameManager : MonoBehaviour
             characterMenu.GetComponent<CharacterMenu>().Hide();
             activation = true;
         }
-    }
-
-    public void ShowPlotMenu()
-    {
-        plotMenu.GetComponent<PlotMenu>().ShowMenu();
-    }
-
-    public void ChangePlotType(GameObject plot)
-    {
-        plotPrefab = plot;
     }
 
     /// <summary>
