@@ -14,6 +14,8 @@ public struct SaveData
     public float ScytheRank { get; set; }
 
     public Dictionary<int, SerializablePlot> Plots { get; set; }
+
+    
 }
 
 [Serializable]
@@ -56,12 +58,23 @@ public struct SerializableVector3
 [System.Serializable]
 public struct SerializablePlot
 {
+    public PlotType Type { get; set; }
+
     public SerializableSoul[] Souls { get; set; }
+
+    public enum PlotType
+    {
+        Base,
+        City,
+        Moon
+    }
 }
 
 [System.Serializable]
 public struct SerializableSoul
 {
+    public SoulType Type { get; set; }
+
     public float EctoPerSecond { get; set; }
     public float EctoPerHarvest { get; set; }
     public float Lifespan { get; set; }
@@ -69,4 +82,12 @@ public struct SerializableSoul
 
     public SerializableColor BaseColor { get; set; }
     public SerializableColor MatureColor { get; set; }
+
+    public enum SoulType
+    {
+        Base,
+        College,
+        Construction,
+        Astronaut
+    }
 }

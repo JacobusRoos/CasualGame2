@@ -46,12 +46,15 @@ public class GameManager : MonoBehaviour
 
     public GameObject selectedGrid;
 
+    public List<GameObject> allSouls;
+    public List<GameObject> allPlots;
+
     // Use this for initialization
     void Start ()
     {
         selectedSoul = null;
         soulIsSelected = false;
-        //LoadSave();
+        LoadSave();
         plotIsSelected = false;
         selectedImage.SetActive(false);
 
@@ -273,6 +276,18 @@ public class GameManager : MonoBehaviour
             {
                 var plot = plotObj.GetComponent<Plot>();
                 SerializablePlot splot = new SerializablePlot() { Souls = new SerializableSoul[plot.SoulContent.Count] };
+                switch(plot.cost)
+                {
+                    case 35:
+                        splot.Type = SerializablePlot.PlotType.Base;
+                        break;
+                    case 125:
+                        splot.Type = SerializablePlot.PlotType.City;
+                        break;
+                    case 300:
+                        splot.Type = SerializablePlot.PlotType.Moon;
+                        break;
+                }
                 for(int i = 0; i < plot.SoulContent.Count; i++)
                 {
                     var soul = plot.SoulContent[i].GetComponent<Soul>();
@@ -284,6 +299,21 @@ public class GameManager : MonoBehaviour
                         BaseColor = soul.baseColor,
                         MatureColor = soul.matureColor
                     };
+                    switch(soul.cost)
+                    {
+                        case 10:
+                            ssoul.Type = SerializableSoul.SoulType.Base;
+                            break;
+                        case 25:
+                            ssoul.Type = SerializableSoul.SoulType.College;
+                            break;
+                        case 50:
+                            ssoul.Type = SerializableSoul.SoulType.Construction;
+                            break;
+                        case 100:
+                            ssoul.Type = SerializableSoul.SoulType.Astronaut;
+                            break;
+                    }
                     splot.Souls[i] = ssoul;
                 }
                 var parentGrid = plotObj.GetComponentInParent<GridPart>();
@@ -319,11 +349,11 @@ public class GameManager : MonoBehaviour
 
             foreach(var plot in save.Plots)
             {
-                GameObject instantiated = playerManager.AddPlotDirect(plotPrefab, plot.Key);
+                GameObject instantiated = playerManager.AddPlotDirect(allPlots[(int)plot.Value.Type], plot.Key);
                 Plot newPlot = instantiated.GetComponent<Plot>();
                 foreach(var savedSoul in plot.Value.Souls)
                 {
-                    GameObject instantiatedSoul = newPlot.AddToPlotDirect(soulPrefab);
+                    GameObject instantiatedSoul = newPlot.AddToPlotDirect(allSouls[(int)savedSoul.Type]);
                     Soul newSoul = instantiatedSoul.GetComponent<Soul>();
                     newSoul.ectoPerHarvest = savedSoul.EctoPerHarvest;
                     newSoul.ectoPerSecond = savedSoul.EctoPerSecond;
