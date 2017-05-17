@@ -126,29 +126,36 @@ public class PlayerManager : MonoBehaviour
         {
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(1).GetChild(3).gameObject.SetActive(false);
-            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(0).GetChild(0).GetChild(0).FindChild("College Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("College Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("College Soul").GetComponent<Button>().interactable = true;
         }
         if (level >= 7)
         {
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
-            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(0).GetChild(0).GetChild(0).FindChild("Construct Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Construct Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Construct Soul").GetComponent<Button>().interactable = true;
         }
         if (level >= 11)
         {
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(3).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(9).GetChild(0).GetChild(0).GetChild(3).GetChild(3).gameObject.SetActive(false);
-            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(0).GetChild(0).GetChild(0).FindChild("Astro Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Astro Soul").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("SoulSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Astro Soul").GetComponent<Button>().interactable = true;
         }
         if (level >= 5)
         {
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(1).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(1).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("City Plot").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("City Plot").GetComponent<Button>().interactable = true;
         }
         if (level >= 10)
         {
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(2).GetChild(2).gameObject.SetActive(false);
             CharacterMenu.transform.GetChild(0).GetChild(10).GetChild(0).GetChild(0).GetChild(2).GetChild(3).gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Moon Plot").FindChild("Cover").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").GetChild(1).GetChild(0).GetChild(0).FindChild("Moon Plot").GetComponent<Button>().interactable = true;
         }
     }
     public void AddPlot(GameObject plot)
