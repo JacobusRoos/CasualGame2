@@ -23,7 +23,6 @@ public class GridPart : MonoBehaviour
 	{
         if (canPlace)
         {
-            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(true);
             gameManager.selectedGrid = gameObject;
             /*if (transform.childCount == 0)
             {

@@ -104,7 +104,6 @@ public class GameManager : MonoBehaviour
             if(rayResults.Count > 0)
             {
                 initialTag = rayResults[0].gameObject.tag;
-                Debug.Log(initialTag);
             }
 
             initialRay = rayResults.Count;
@@ -118,8 +117,7 @@ public class GameManager : MonoBehaviour
             {
                 soulIsSelected = false;
                 playerManager.selectedPlot = null;
-                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
-                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+                selectedGrid = null;
             }
             //click on ground
             else if(initialTag == "PlotPoint")
@@ -127,9 +125,8 @@ public class GameManager : MonoBehaviour
                 //Debug.Log("soul is not clicked");
                 soulIsSelected = false;
                 playerManager.selectedPlot = null;
-                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
-                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
             }
+
 
             if(initialRay == 0 || initialTag == "Soul")
             {
@@ -178,19 +175,34 @@ public class GameManager : MonoBehaviour
 		if(!Input.GetMouseButton(0))
         {
 			canMove = false;
-		}
-	}
+        }
+        if (playerManager.selectedPlot == null && selectedGrid == null)
+        {
+            GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
+            GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
+        }
+        else
+        {
+            GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(false);
+            GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(false);
+        }
+        if (selectedGrid != null)
+        {
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(true);
+        }
+        else
+        {
+            GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
+        }
+    }
 
     public void CloseSoulSelect()
     {
         playerManager.selectedPlot = null;
-        //GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(false);
-        GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
-        GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
     }
     public void ClosePlotSelect()
     {
-        GameObject.Find("GUI").transform.FindChild("PlotSelect").gameObject.SetActive(false);
+        selectedGrid = null;
     }
 
     public void SelectSoul(GameObject Soul)
@@ -397,6 +409,11 @@ public class GameManager : MonoBehaviour
             characterMenu.GetComponent<CharacterMenu>().Hide();
             activation = true;
         }
+    }
+
+    public void SetCredits(bool active)
+    {
+        GameObject.Find("Credits").SetActive(active);
     }
 
     /// <summary>

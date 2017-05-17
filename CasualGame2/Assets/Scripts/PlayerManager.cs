@@ -95,8 +95,6 @@ public class PlayerManager : MonoBehaviour
         if(selectedPlot != null)
         {
             GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.SetActive(true);
-            GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(false);
-            GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(false);
         }
         else
         {

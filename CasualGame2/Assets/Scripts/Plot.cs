@@ -21,6 +21,7 @@ public class Plot : MonoBehaviour
 
     public void OnClick()
     {
+        playerManager.gameManager.selectedGrid = null;
         if (!playerManager.gameManager.QuickHarvest)
         {
             playerManager.gameManager.soulIsSelected = false;
@@ -28,8 +29,6 @@ public class Plot : MonoBehaviour
             if (GameObject.Find("GUI").transform.FindChild("SoulSelect").gameObject.activeSelf && playerManager.selectedPlot == gameObject)
             {
                 playerManager.selectedPlot = null;
-                GameObject.Find("GUI").transform.FindChild("QuickHarvest").gameObject.SetActive(true);
-                GameObject.Find("GUI").transform.FindChild("ToPlayer").gameObject.SetActive(true);
             }
             else
             {
@@ -58,7 +57,7 @@ public class Plot : MonoBehaviour
             foreach(GameObject obj in soulContent)
             {
                 int pos = (int)((obj.transform.localPosition.x + 2f) / 4f);
-                int pos2 = -(int)((obj.transform.localPosition.y - (spread * (capacity / 2) - 1)) / (spread * 2));
+                int pos2 = -(int)Mathf.Round((obj.transform.localPosition.y - (spread * (capacity / 2) - 1)) / (spread * 2));
                 freePositions[(pos) + (pos2 * 2)] = false;
             }
             int closestFree = 0;
