@@ -9,6 +9,7 @@ public class Soul : MonoBehaviour
     public float ectoPerSecond;
     public float ectoPerHarvest;
     public float lifespan;
+    private float maxLifespan;
     public float timeToRipe;
     public GameObject plot;
     Color baseColor;
@@ -23,6 +24,8 @@ public class Soul : MonoBehaviour
         baseColor = transform.GetComponent<Image>().color;
         //transform.parent = null;
         transform.rotation = GameObject.FindGameObjectWithTag("MainCamera").transform.rotation;
+
+        maxLifespan = lifespan;
         //transform.parent = plot.transform;
 
         //ectoPerSecond = 2;
@@ -95,6 +98,15 @@ public class Soul : MonoBehaviour
         plot.GetComponent<Plot>().RemoveFromPlot(gameObject);
         GameObject fade = Instantiate(soulFade, transform.position, transform.rotation);
         fade.GetComponent<SpriteRenderer>().color = transform.GetComponent<Image>().color;
+        fade.GetComponent<SpriteRenderer>().sprite = transform.GetComponent<Image>().sprite;
         Destroy(gameObject);
+    }
+
+    public float MaxLifespan
+    {
+        get
+        {
+            return maxLifespan;
+        }
     }
 }
