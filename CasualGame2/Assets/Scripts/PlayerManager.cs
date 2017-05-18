@@ -64,9 +64,9 @@ public class PlayerManager : MonoBehaviour
                 anySouls = true;
             }
         }
-        if(!anySouls && ectoplasm < 35)
+        if(!anySouls && ectoplasm < 10)
         {
-            ectoplasm += .1f * Time.deltaTime;
+            ectoplasm = 10;
         }
         if(experience >= nextLevelExperience)
         {
